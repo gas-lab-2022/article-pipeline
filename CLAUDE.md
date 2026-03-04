@@ -1,0 +1,81 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+WordPress ブログ「programming-zero.net」の記事生成パイプライン。Claude Code のカスタムコマンド（`/generate`）で SEO 最適化された日本語記事を 7 ステップで生成し、WordPress に下書き投稿する。
+
+## Commands
+
+```bash
+# 記事生成（WordPress に下書き投稿）
+/generate <キーワード>
+
+# 記事生成（ローカル保存のみ、WP投稿スキップ）
+/generate <キーワード> --local
+
+# 記事生成（文体キャッシュを無視して再分析）
+/generate <キーワード> --refresh-style
+
+# WordPress から直近N件の記事を取得
+npm run wp:fetch -- [count]    # default: 5
+
+# article.json を WordPress に下書き投稿
+npm run wp:publish -- output/article.json
+
+# TypeScript 型チェック
+npx tsc --noEmit
+```
+
+## Architecture
+
+```
+.claude/commands/generate.md        ← 記事生成パイプライン定義（7ステップ）
+scripts/wp-fetch-posts.ts           ← WP REST API: 既存記事取得
+scripts/wp-publish-draft.ts         ← WP REST API: 下書き投稿
+output/article.json                 ← 生成された記事データ（gitignore対象）
+cache/style-profiles/{domain}.json  ← 文体分析キャッシュ（gitignore対象）
+```
+
+### 記事生成パイプライン（`/generate`）
+
+Step 0〜7 が順番に実行され、各ステップの出力が次のステップのコンテキストとなる:
+
+0. **文体分析** → `styleProfile`（キャッシュ or 既存記事の語尾・トーン・見出しパターン）
+1. **キーワード分析** → `keywordAnalysis`（表層意図・潜在意図・最終ゴール）
+2. **SEO分析** → `seoAnalysis`（WebSearch で上位記事を調査）
+3. **意図深掘り** → `intentDeepDive`（読者の不安・障壁・望む結果）
+4. **差別化設計** → `differentiation`（上位記事を超えるポイント）
+5. **アウトライン** → `outline`（タイトル・メタ・セクション構成）
+6. **本文生成** → `output/article.json`（HTML 形式の記事本文）
+7. **WP投稿**（`--local` 指定時はスキップ）
+
+### article.json フォーマット
+
+```json
+{
+  "title": "記事タイトル",
+  "htmlContent": "<h2>...</h2><p>...</p>...",
+  "metaDescription": "メタディスクリプション",
+  "tags": ["タグ1", "タグ2"]
+}
+```
+
+### 文体キャッシュ（`cache/style-profiles/`）
+
+- Step 0 の文体分析結果をドメインごとにキャッシュ（例: `cache/style-profiles/programming-zero.net.json`）
+- 2回目以降の `/generate` 実行時は記事取得・分析をスキップしてキャッシュを再利用
+- **TTL 30日**: 30日経過で自動的に再分析（キャッシュ使用時に経過日数を表示）
+- `--refresh-style` フラグでキャッシュを手動で無視して再分析も可能
+
+## WordPress API
+
+- REST API + Basic Auth（Application Password）
+- 認証情報は `.env` に格納（`WP_SITE_URL`, `WP_USERNAME`, `WP_APP_PASSWORD`）
+
+## Tech Stack
+
+- TypeScript 5.7（ES2022, ESNext modules）
+- tsx でスクリプト実行（ビルド不要）
+- dotenv で環境変数管理

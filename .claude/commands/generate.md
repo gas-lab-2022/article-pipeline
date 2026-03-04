@@ -5,35 +5,62 @@
 
 ---
 
-## 準備: 既存記事の取得
-
-まず、WordPress から直近5件の既存記事を取得します。以下の Bash コマンドを実行してください：
-
-```bash
-npx tsx scripts/wp-fetch-posts.ts 5
-```
-
-取得した JSON を `existingArticles` として保持してください。
-
----
-
-## Step 0: 文体分析
+## Step 0: 文体分析（キャッシュ対応）
 
 あなたは文体分析の専門家です。
 
-上記で取得した既存記事（`existingArticles`）の文体・スタイルを分析してください。
+このステップでは、既存記事の文体を分析して `styleProfile` を取得します。
+分析結果はドメインごとにキャッシュされ、2回目以降は再利用されます。
 
-### 分析項目
+### 手順
 
-以下の観点で分析してください：
+1. `.env` の `WP_SITE_URL` からドメインを取得してください（例: `https://programming-zero.net` → `programming-zero.net`）。以下の Bash コマンドで取得できます：
 
-1. **writingStyle**: 文体の全体的な特徴（説明的か会話的か、簡潔か詳細か、など）
-2. **sentenceEndings**: よく使われる語尾パターン（3〜5個）
-3. **tone**: 敬体/常体の判定と、トーンの特徴（親しみやすさ、専門性など）
-4. **headingPattern**: H2/H3見出しの使い方パターン（命名規則、粒度など）
-5. **sectionStructure**: セクション構成の傾向（導入→本題→まとめ、など）
+```bash
+grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||'
+```
 
-結果を `styleProfile` として保持してください。
+2. `$ARGUMENTS` に `--refresh-style` が含まれている場合は **手順 4（キャッシュなし）** に進んでください。
+
+3. **キャッシュ確認**: `cache/style-profiles/{domain}.json` を Read ツールで読み込んでください。
+   - **ファイルが存在しない場合（キャッシュミス）**: 手順 4 に進んでください。
+   - **ファイルが存在する場合**: `cachedAt` の日時と現在日時を比較してください。
+     - **30日以上経過** → 「⏰ 文体キャッシュが {経過日数}日前のため、自動で再分析します」と表示し、**手順 4** に進んでください。
+     - **30日未満** → 「✅ 文体キャッシュを使用（{経過日数}日前に分析）」と表示し、JSON の `styleProfile` フィールドを `styleProfile` として保持して **Step 1 に進んでください**（記事取得・分析をスキップ）。
+
+4. **キャッシュなし（新規分析）**:
+
+   a. WordPress から直近5件の既存記事を取得します：
+
+   ```bash
+   npx tsx scripts/wp-fetch-posts.ts 5
+   ```
+
+   b. 取得した記事の文体・スタイルを以下の観点で分析してください：
+
+   - **writingStyle**: 文体の全体的な特徴（説明的か会話的か、簡潔か詳細か、など）
+   - **sentenceEndings**: よく使われる語尾パターン（3〜5個）
+   - **tone**: 敬体/常体の判定と、トーンの特徴（親しみやすさ、専門性など）
+   - **headingPattern**: H2/H3見出しの使い方パターン（命名規則、粒度など）
+   - **sectionStructure**: セクション構成の傾向（導入→本題→まとめ、など）
+
+   c. 分析結果を以下のフォーマットで `cache/style-profiles/{domain}.json` に Write ツールで書き出してください：
+
+   ```json
+   {
+     "domain": "{domain}",
+     "cachedAt": "{ISO 8601形式の現在日時}",
+     "styleProfile": {
+       "writingStyle": "...",
+       "sentenceEndings": ["...", "..."],
+       "tone": "...",
+       "headingPattern": "...",
+       "sectionStructure": "..."
+     }
+   }
+   ```
+
+   d. `styleProfile` を保持してください。
 
 ---
 
