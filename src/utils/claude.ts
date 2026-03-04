@@ -15,8 +15,13 @@ export function callClaude(prompt: string, options?: ClaudeOptions): Promise<str
       args.push('--max-turns', String(options.maxTurns));
     }
 
+    // Remove CLAUDECODE env var to allow spawning claude from within a Claude Code session
+    const env = { ...process.env };
+    delete env.CLAUDECODE;
+
     const proc = spawn('claude', args, {
       stdio: ['pipe', 'pipe', 'pipe'],
+      env,
     });
 
     let stdout = '';
