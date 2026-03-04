@@ -1,3 +1,10 @@
+---
+name: revise
+description: WordPress上の既存記事をSEO再調査・診断に基づいてリライトし、記事を更新するパイプライン。
+argument-hint: "<記事URL> [--local] [--refresh-style]"
+disable-model-invocation: true
+---
+
 あなたは WordPress ブログ「programming-zero.net」の記事リライトパイプラインです。
 以下の手順を順番に実行し、既存記事「$ARGUMENTS」をリライトしてください。
 
@@ -79,7 +86,7 @@ npx tsx scripts/wp-fetch-post-by-url.ts <記事URL>
 ```
 
 取得結果を `originalArticle` として保持してください。以下のフィールドを含みます：
-- **id**: 記事の Post ID（Step 6 で更新時に使用）
+- **id**: 記事の Post ID（Step 7 で更新時に使用）
 - **title**: 記事タイトル
 - **content**: 記事本文（HTML）
 - **slug**: URLスラッグ
@@ -205,7 +212,83 @@ npx tsx scripts/wp-fetch-post-by-url.ts <記事URL>
 
 ---
 
-## Step 6: WordPress 記事更新（オプション）
+## Step 6: 記事レビュー
+
+あなたは記事品質レビューの専門家です。
+
+### コンテキスト
+- Step 0 の `styleProfile`
+- Step 5 で生成した `output/article.json`
+
+### タスク
+
+`output/article.json` を Read ツールで読み込み、以下の **5カテゴリ** でレビューしてください。
+
+#### 1. SEO
+- タイトル長（32文字以内推奨）
+- メタディスクリプション（120文字以内）
+- 見出し構造（H2/H3 の階層が適切か）
+- キーワードの自然な配置
+
+#### 2. 構成（structure）
+- 導入→本題→まとめの論理フロー
+- セクション間の繋がり
+- 冗長箇所
+- 情報の過不足
+
+#### 3. 可読性（readability）
+- 一文・段落の長さ
+- 専門用語への説明
+- 読者にとってのわかりやすさ
+
+#### 4. 文体一貫性（styleConsistency）
+- `styleProfile` との整合（語尾パターン、トーン、見出しパターン）
+
+#### 5. 正確性（accuracy）
+- 事実関係の疑わしい記述
+- 古くなりそうな情報
+- 誤解を招く表現
+
+### 各カテゴリの出力フォーマット
+
+- **score**: A / B / C の3段階（A=問題なし、B=軽微な改善余地、C=要改善）
+- **findings**: 具体的な指摘事項の配列（箇所の引用 + 改善提案）
+
+### 総合評価
+
+すべてのカテゴリの評価を踏まえて、**overallScore**（A / B / C）と **summary**（総合的なレビューコメント）を出力してください。
+
+### 出力
+
+結果を以下の JSON フォーマットで `output/review.json` に Write ツールで書き出してください：
+
+```json
+{
+  "reviewedAt": "ISO 8601形式の現在日時",
+  "articleTitle": "記事タイトル",
+  "categories": {
+    "seo": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
+    "structure": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
+    "readability": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
+    "styleConsistency": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
+    "accuracy": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] }
+  },
+  "overallScore": "A|B|C",
+  "summary": "総合的なレビューコメント"
+}
+```
+
+### コンソール表示
+
+レビュー結果を見やすくコンソールに表示してください：
+
+1. 各カテゴリのスコアを一覧表示（A=✅、B=⚠️、C=❌）
+2. C評価のカテゴリがあれば、該当する指摘を強調表示
+3. 総合評価とサマリーを最後に表示
+
+---
+
+## Step 7: WordPress 記事更新（オプション）
 
 `$ARGUMENTS` に `--local` が含まれている場合は、このステップをスキップしてください。
 `output/article.json` の保存のみで完了です。
@@ -228,4 +311,5 @@ npx tsx scripts/wp-update-post.ts {originalArticle.id} output/article.json
 - 元の記事タイトル → リライト後のタイトル
 - 主な改善点（箇条書き3〜5個）
 - `output/article.json` のパス
+- レビュー結果の総合評価（`output/review.json`）
 - WordPress を更新した場合は編集 URL
