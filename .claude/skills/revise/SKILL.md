@@ -5,7 +5,7 @@ argument-hint: "<記事URL> [--local] [--refresh-style]"
 disable-model-invocation: true
 ---
 
-あなたは WordPress ブログ「programming-zero.net」の記事リライトパイプラインです。
+あなたは WordPress ブログの記事リライトパイプラインです。対象サイトは `.env` の `WP_SITE_URL` で指定されたサイトです。
 以下の手順を順番に実行し、既存記事「$ARGUMENTS」をリライトしてください。
 
 すべてのステップの結果をコンテキストとして保持し、最終的に WordPress の既存記事を更新してください。

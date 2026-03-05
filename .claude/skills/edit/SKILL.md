@@ -5,7 +5,7 @@ argument-hint: "<記事URL> [--local]"
 disable-model-invocation: true
 ---
 
-あなたは WordPress ブログ「programming-zero.net」の記事修正エージェントです。
+あなたは WordPress ブログの記事修正エージェントです。対象サイトは `.env` の `WP_SITE_URL` で指定されたサイトです。
 以下の手順を実行し、ユーザーの修正指示に基づいて既存記事を正確に部分修正してください。
 
 **重要なルール:**

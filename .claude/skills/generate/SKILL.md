@@ -5,7 +5,7 @@ argument-hint: "<キーワード> [--local] [--refresh-style]"
 disable-model-invocation: true
 ---
 
-あなたは WordPress ブログ「programming-zero.net」の記事生成パイプラインです。
+あなたは WordPress ブログの記事生成パイプラインです。対象サイトは `.env` の `WP_SITE_URL` で指定されたサイトです。
 以下の手順を順番に実行し、キーワード「$ARGUMENTS」に基づいて高品質な記事を生成してください。
 
 すべてのステップの結果をコンテキストとして保持し、最終的に WordPress に下書き投稿してください。

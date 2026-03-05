@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-WordPress ブログ「programming-zero.net」の記事生成パイプライン。Claude Code のスキル（`/generate`）で SEO 最適化された日本語記事を 9 ステップで生成し、WordPress に下書き投稿する。
+WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` で指定されたサイトに対し、Claude Code のスキル（`/generate`）で SEO 最適化された日本語記事を 9 ステップで生成し、WordPress に下書き投稿する。
 
 ## Skills & Commands
 
