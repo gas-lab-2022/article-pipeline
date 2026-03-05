@@ -36,6 +36,12 @@ WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` 
 # ファクトチェック（WebSearchで事実検証、指摘のみ）
 /fact-check [article.json パス]  # デフォルト: output/article.json
 
+# スクリーンショット撮影（Webページ）
+/screenshot web <URL> [--output path] [--selector CSS]
+
+# スクリーンショット撮影（ターミナル風モックアップ）
+/screenshot terminal <説明> [--output path]
+
 # WordPress から直近N件の記事を取得
 npm run wp:fetch -- [count]    # default: 5
 
@@ -60,6 +66,9 @@ npx tsc --noEmit
 .claude/skills/review/SKILL.md      ← 記事レビューパイプライン定義（3ステップ）
 .claude/skills/fact-check/SKILL.md  ← ファクトチェックパイプライン定義（2ステップ）
 .claude/skills/edit/SKILL.md        ← 記事修正パイプライン定義（7ステップ）
+.claude/skills/screenshot/SKILL.md  ← スクリーンショット撮影（Web + ターミナルモック）
+templates/terminal-mockup.html      ← ターミナル風HTMLテンプレート
+docs/plans/claude-code-series.json  ← シリーズ記事管理ファイル（16記事）
 .claude/agents/style-loader.md      ← 共通エージェント: 文体キャッシュ読込/分析
 .claude/agents/article-reviewer.md  ← 共通エージェント: 5カテゴリ並列レビュー
 .claude/agents/fact-checker.md      ← 共通エージェント: 主張抽出+並列WebSearch検証
