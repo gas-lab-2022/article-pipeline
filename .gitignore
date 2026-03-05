@@ -5,3 +5,5 @@ output/*.json
 output/**/*.json
 cache/*.json
 cache/**/*.json
+output/**/*.png
+output/**/*.html
