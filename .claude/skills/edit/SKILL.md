@@ -23,7 +23,7 @@ disable-model-invocation: true
 
 ### 手順
 
-1. `.env` の `WP_SITE_URL` からドメインを取得してください（例: `https://programming-zero.net` → `programming-zero.net`）。以下の Bash コマンドで取得できます：
+1. `.env` の `WP_SITE_URL` からドメインを取得してください（例: `https://example.com` → `example.com`）。以下の Bash コマンドで取得できます：
 
 ```bash
 grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||'
@@ -115,7 +115,7 @@ npx tsx scripts/wp-fetch-post-by-url.ts <記事URL>
 ## 記事の構造
 
 タイトル: 「プログラミング入門ガイド」
-URL: https://programming-zero.net/programming-guide/
+URL: https://example.com/programming-guide/
 
 ### 見出し構造
 - H2: プログラミングとは？

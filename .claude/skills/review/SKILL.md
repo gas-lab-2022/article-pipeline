@@ -21,7 +21,7 @@ disable-model-invocation: true
 
 ### 手順
 
-1. `.env` の `WP_SITE_URL` からドメインを取得してください（例: `https://programming-zero.net` → `programming-zero.net`）。以下の Bash コマンドで取得できます：
+1. `.env` の `WP_SITE_URL` からドメインを取得してください（例: `https://example.com` → `example.com`）。以下の Bash コマンドで取得できます：
 
 ```bash
 grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||'

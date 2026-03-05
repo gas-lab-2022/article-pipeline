@@ -140,7 +140,7 @@ Step 0〜6 が実行される（Step 3 は修正完了までループ）:
 
 ### 文体キャッシュ（`cache/style-profiles/`）
 
-- Step 0 の文体分析結果をドメインごとにキャッシュ（例: `cache/style-profiles/programming-zero.net.json`）
+- Step 0 の文体分析結果をドメインごとにキャッシュ（例: `cache/style-profiles/your-domain.json`）
 - 2回目以降の `/generate` 実行時は記事取得・分析をスキップしてキャッシュを再利用
 - **TTL 30日**: 30日経過で自動的に再分析（キャッシュ使用時に経過日数を表示）
 - `--refresh-style` フラグでキャッシュを手動で無視して再分析も可能
