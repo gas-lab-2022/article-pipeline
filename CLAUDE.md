@@ -160,11 +160,14 @@ Step 0〜6 が実行される（Step 3 は修正完了までループ）:
 ```json
 {
   "title": "記事タイトル",
+  "slug": "english-hyphenated-slug",
   "htmlContent": "<h2>...</h2><p>...</p>...",
   "metaDescription": "メタディスクリプション",
   "tags": ["タグ1", "タグ2"]
 }
 ```
+
+- `slug`: パーマリンク。`/generate` では既存記事のスラッグパターンを WP API で取得・分析して同じスタイルで新規生成。`/revise` `/edit` では既存スラッグを維持。
 
 ### 文体キャッシュ（`cache/style-profiles/`）
 

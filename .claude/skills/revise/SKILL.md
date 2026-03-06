@@ -177,11 +177,14 @@ npx tsx scripts/wp-fetch-post-by-url.ts <記事URL>
 ```json
 {
   "title": "記事タイトル",
+  "slug": "既存記事のスラッグをそのまま使用",
   "htmlContent": "<h2>...</h2><p>...</p>...",
   "metaDescription": "メタディスクリプション",
   "tags": ["タグ1", "タグ2", "タグ3"]
 }
 ```
+
+**slug**: `originalArticle.slug` をそのまま使用してください（既存のパーマリンクを変更しない）。
 
 生成した JSON を `{sessionDir}/article.json` にファイルとして書き出してください（Write ツールを使用）。
 

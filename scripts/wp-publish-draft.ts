@@ -3,6 +3,7 @@ import { readFileSync } from 'fs';
 
 interface ArticleData {
   title: string;
+  slug?: string;
   htmlContent: string;
   metaDescription: string;
   tags?: string[];
@@ -36,6 +37,7 @@ async function main() {
     },
     body: JSON.stringify({
       title: article.title,
+      ...(article.slug ? { slug: article.slug } : {}),
       content: article.htmlContent,
       status: 'draft',
       excerpt: article.metaDescription,

@@ -173,11 +173,14 @@ After:  「変更後のテキスト」
 ```json
 {
   "title": "記事タイトル（currentArticle.title）",
+  "slug": "既存記事のスラッグ（originalArticle.slug）",
   "htmlContent": "記事本文HTML（currentArticle.content）",
   "metaDescription": "メタディスクリプション（既存記事から抽出、またはタイトルから生成）",
   "tags": []
 }
 ```
+
+**slug**: `originalArticle.slug` をそのまま使用してください（既存のパーマリンクを変更しない）。
 
 Write ツールで `{sessionDir}/article.json` に書き出してください。
 
