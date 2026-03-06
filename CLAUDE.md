@@ -29,6 +29,9 @@ WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` 
 # シリーズ記事生成（対話形式: シリーズ・記事を選択して生成）
 /series-generate
 
+# 手動で収集した実体験データを記事に反映
+/incorporate [セッションディレクトリ]
+
 # スクリーンショット撮影（対話形式: モード・URL/説明を質問）
 /screenshot
 
@@ -44,6 +47,9 @@ npm run wp:publish -- output/article.json
 # article.json で既存記事を更新
 npm run wp:update -- <postId> output/article.json
 
+# 画像をWPメディアライブラリにアップロード
+npm run wp:upload-media -- <image-path> [alt-text]
+
 # TypeScript 型チェック
 npx tsc --noEmit
 ```
@@ -57,6 +63,7 @@ npx tsc --noEmit
 .claude/skills/review/SKILL.md      ← 記事レビューパイプライン定義（3ステップ）
 .claude/skills/fact-check/SKILL.md  ← ファクトチェックパイプライン定義（2ステップ）
 .claude/skills/edit/SKILL.md        ← 記事修正パイプライン定義（7ステップ）
+.claude/skills/incorporate/SKILL.md  ← 手動実体験データの記事反映（handson-tasks.json 処理）
 .claude/skills/screenshot/SKILL.md  ← スクリーンショット撮影（Web + ターミナルモック）
 templates/terminal-mockup.html      ← ターミナル風HTMLテンプレート
 docs/plans/claude-code-series.json  ← シリーズ記事管理ファイル（16記事）
@@ -67,11 +74,14 @@ scripts/wp-fetch-posts.ts           ← WP REST API: 既存記事取得（複数
 scripts/wp-fetch-post-by-url.ts     ← WP REST API: URL指定で単一記事取得
 scripts/wp-publish-draft.ts         ← WP REST API: 下書き投稿（+ SEOフィールド自動設定）
 scripts/wp-update-post.ts           ← WP REST API: 既存記事更新（+ SEOフィールド自動設定）
+scripts/wp-upload-media.ts           ← WP REST API: メディアアップロード（スクリーンショット等）
 scripts/wp-set-seo-fields.ts        ← SEOフィールド設定（.env のキー設定に基づく汎用実装）
 docs/wp-theme-the-thor.md           ← THE THORテーマ固有の .env 設定例
 output/{sessionDir}/article.json     ← 生成された記事データ（gitignore対象）
 output/{sessionDir}/review.json     ← レビュー結果（gitignore対象）
 output/{sessionDir}/fact-check.json ← ファクトチェック結果（gitignore対象）
+output/{sessionDir}/handson-tasks.json ← 手動実体験タスク一覧・機械読取用（gitignore対象）
+output/{sessionDir}/handson-tasks.md  ← 手動実体験タスク一覧・ユーザー向け（gitignore対象）
 cache/style-profiles/{domain}.json  ← 文体分析キャッシュ（gitignore対象）
 ```
 
@@ -103,6 +113,7 @@ Step 0〜9 が順番に実行され、各ステップの出力が次のステッ
 4. **差別化設計** → `differentiation`（上位記事を超えるポイント）
 5. **アウトライン** → `outline`（タイトル・メタ・セクション構成）
 6. **本文生成** → `{sessionDir}/article.json`（HTML 形式の記事本文）
+6.5. **スクリーンショット生成** → Playwright で撮影 → WP メディアアップロード → 記事 HTML に `<figure>` 挿入（`screenshotCandidates` が空なら スキップ）
 7. **記事レビュー** → `{sessionDir}/review.json`（article-reviewer エージェントに委任）
 8. **ファクトチェック** → `{sessionDir}/fact-check.json`（fact-checker エージェントに委任）
 9. **WP投稿**（対話で「いいえ」選択時はスキップ）

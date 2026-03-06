@@ -6,7 +6,8 @@
     "wp:fetch": "tsx scripts/wp-fetch-posts.ts",
     "wp:fetch-by-url": "tsx scripts/wp-fetch-post-by-url.ts",
     "wp:publish": "tsx scripts/wp-publish-draft.ts",
-    "wp:update": "tsx scripts/wp-update-post.ts"
+    "wp:update": "tsx scripts/wp-update-post.ts",
+    "wp:upload-media": "tsx scripts/wp-upload-media.ts"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
