@@ -13,7 +13,7 @@ disable-model-invocation: true
 
 ### Step 1-1: シリーズの選択
 
-`docs/plans/` 配下の `*-series.json` ファイルを Glob ツールで検索してください。
+`docs/series/` 配下の `*-series.json` ファイルを Glob ツールで検索してください。
 
 **0件の場合:**
 
@@ -24,7 +24,7 @@ disable-model-invocation: true
 新しいシリーズ計画を作成しますか？（作成する場合、シリーズ名とキーワード一覧を教えてください）
 ```
 
-新規作成の場合は、ユーザーの入力をもとに `docs/plans/{slug}-series.json` を以下の形式で作成：
+新規作成の場合は、ユーザーの入力をもとに `docs/series/{slug}-series.json` を以下の形式で作成：
 
 ```json
 {

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` で指定されたサイトに対し、Claude Code のスキル（`/generate`）で SEO 最適化された日本語記事を 9 ステップで生成し、WordPress に下書き投稿する。
 
-**設計原則**: このリポジトリは特定サイト・テーマに依存しない汎用パイプラインとして設計する。サイト固有の設定は `.env` や `docs/plans/` に分離し、スキル・スクリプトのコードにハードコードしない。
+**設計原則**: このリポジトリは特定サイト・テーマに依存しない汎用パイプラインとして設計する。サイト固有の設定は `.env` や `docs/series/` に分離し、スキル・スクリプトのコードにハードコードしない。
 
 ## Skills & Commands
 
@@ -58,7 +58,7 @@ npx tsc --noEmit
 
 ```
 .claude/skills/generate/SKILL.md    ← 記事生成パイプライン定義（9ステップ、汎用）
-.claude/skills/series-generate/SKILL.md ← シリーズ記事生成（3フェーズ: 前処理→/generate委任→後処理、docs/plans/*-series.json を使用）
+.claude/skills/series-generate/SKILL.md ← シリーズ記事生成（3フェーズ: 前処理→/generate委任→後処理、docs/series/*-series.json を使用）
 .claude/skills/revise/SKILL.md      ← 既存記事リライトパイプライン定義（8ステップ）
 .claude/skills/review/SKILL.md      ← 記事レビューパイプライン定義（3ステップ）
 .claude/skills/fact-check/SKILL.md  ← ファクトチェックパイプライン定義（2ステップ）
@@ -66,7 +66,7 @@ npx tsc --noEmit
 .claude/skills/incorporate/SKILL.md  ← 手動実体験データの記事反映（handson-tasks.json 処理）
 .claude/skills/screenshot/SKILL.md  ← スクリーンショット撮影（Web + ターミナルモック）
 templates/terminal-mockup.html      ← ターミナル風HTMLテンプレート
-docs/plans/claude-code-series.json  ← シリーズ記事管理ファイル（16記事）
+docs/series/claude-code-series.json ← シリーズ記事管理ファイル（16記事）
 .claude/agents/style-loader.md      ← 共通エージェント: 文体キャッシュ読込/分析
 .claude/agents/article-reviewer.md  ← 共通エージェント: 5カテゴリ並列レビュー
 .claude/agents/fact-checker.md      ← 共通エージェント: 主張抽出+並列WebSearch検証
