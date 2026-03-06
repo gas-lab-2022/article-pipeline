@@ -1,7 +1,6 @@
 ---
 name: screenshot
 description: Playwright MCP を使って Web ページまたはターミナルモックアップのスクリーンショットを撮影する。
-argument-hint: ""
 disable-model-invocation: true
 ---
 

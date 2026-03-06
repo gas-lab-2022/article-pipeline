@@ -1,7 +1,6 @@
 ---
 name: series-generate
 description: シリーズ計画に基づいて記事を生成する。対話形式でシリーズ・記事を選択し、内部リンクコンテキストを構築した上で /generate に委任。
-argument-hint: ""
 disable-model-invocation: true
 ---
 
