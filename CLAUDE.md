@@ -52,7 +52,7 @@ npx tsc --noEmit
 
 ```
 .claude/skills/generate/SKILL.md    ← 記事生成パイプライン定義（9ステップ、汎用）
-.claude/skills/series-generate/SKILL.md ← シリーズ記事生成（/generate のラッパー、programming-zero固有）
+.claude/skills/series-generate/SKILL.md ← シリーズ記事生成（/generate のラッパー、docs/plans/*-series.json を使用）
 .claude/skills/revise/SKILL.md      ← 既存記事リライトパイプライン定義（8ステップ）
 .claude/skills/review/SKILL.md      ← 記事レビューパイプライン定義（3ステップ）
 .claude/skills/fact-check/SKILL.md  ← ファクトチェックパイプライン定義（2ステップ）
@@ -67,8 +67,8 @@ scripts/wp-fetch-posts.ts           ← WP REST API: 既存記事取得（複数
 scripts/wp-fetch-post-by-url.ts     ← WP REST API: URL指定で単一記事取得
 scripts/wp-publish-draft.ts         ← WP REST API: 下書き投稿（+ SEOフィールド自動設定）
 scripts/wp-update-post.ts           ← WP REST API: 既存記事更新（+ SEOフィールド自動設定）
-scripts/wp-set-seo-fields.ts        ← XML-RPC: テーマSEOフィールド設定（THE THOR対応）
-docs/wp-theme-the-thor.md           ← THE THORテーマ固有の設定・API対応ガイド
+scripts/wp-set-seo-fields.ts        ← SEOフィールド設定（.env のキー設定に基づく汎用実装）
+docs/wp-theme-the-thor.md           ← THE THORテーマ固有の .env 設定例
 output/{sessionDir}/article.json     ← 生成された記事データ（gitignore対象）
 output/{sessionDir}/review.json     ← レビュー結果（gitignore対象）
 output/{sessionDir}/fact-check.json ← ファクトチェック結果（gitignore対象）
