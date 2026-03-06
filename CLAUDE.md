@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` で指定されたサイトに対し、Claude Code のスキル（`/generate`）で SEO 最適化された日本語記事を 9 ステップで生成し、WordPress に下書き投稿する。
 
+**設計原則**: このリポジトリは特定サイト・テーマに依存しない汎用パイプラインとして設計する。サイト固有の設定は `.env` や `docs/plans/` に分離し、スキル・スクリプトのコードにハードコードしない。
+
 ## Skills & Commands
 
 ```bash
