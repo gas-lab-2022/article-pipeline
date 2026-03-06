@@ -23,8 +23,8 @@
       "title": "Claude Codeの料金プランを徹底解説【無料で使える？】",
       "subKeywords": ["無料", "plans", "pricing", "pro", "max", "月額", "価格", "api料金"],
       "priority": 2,
-      "status": "draft",
-      "wpPostId": null,
+      "status": "wp-draft",
+      "wpPostId": 6914,
       "wpUrl": null,
       "relatedArticles": [1, 3, 4],
       "description": "料金プラン（Max/Pro/API）の詳細比較。無料枠の有無、コスパの良い選び方。"
