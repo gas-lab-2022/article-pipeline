@@ -1,14 +1,36 @@
 ---
 name: revise
 description: WordPress上の既存記事をSEO再調査・診断に基づいてリライトし、記事を更新するパイプライン。
-argument-hint: "<記事URL> [--local] [--refresh-style]"
+argument-hint: "[記事URL]"
 disable-model-invocation: true
 ---
 
 あなたは WordPress ブログの記事リライトパイプラインです。対象サイトは `.env` の `WP_SITE_URL` で指定されたサイトです。
-以下の手順を順番に実行し、既存記事「$ARGUMENTS」をリライトしてください。
 
-すべてのステップの結果をコンテキストとして保持し、最終的に WordPress の既存記事を更新してください。
+---
+
+## Step 0-pre: 対話による入力確認
+
+`$ARGUMENTS` に記事URLが含まれていない場合は、ユーザーに質問してください：
+
+```
+リライトする記事のURLを教えてください（例: https://example.com/article-slug/）
+```
+
+次に、以下のオプションを確認してください：
+
+```
+以下のオプションを確認します：
+1. WordPress の記事を更新しますか？（デフォルト: はい）
+2. 文体キャッシュを再分析しますか？（デフォルト: いいえ、キャッシュを使用）
+```
+
+回答をもとに以下を設定：
+- `articleUrl`: リライト対象の記事URL
+- `isLocal`: WP更新しない場合は true
+- `refreshStyle`: 文体を再分析する場合は true
+
+以降、すべてのステップの結果をコンテキストとして保持し、最終的に WordPress の既存記事を更新してください（`isLocal` が true の場合はスキップ）。
 
 ---
 
@@ -18,7 +40,7 @@ disable-model-invocation: true
 
 ### 手順
 
-1. `$ARGUMENTS` から記事 URL を抽出し、URL のスラッグ部分を取得してください（`--local`, `--refresh-style` フラグは除外）。
+1. `articleUrl` からURL のスラッグ部分を取得してください。
    - 例: `https://example.com/react-hooks-guide/` → `react-hooks-guide`
    - 例: `https://example.com/?p=123` → `p123`
 2. 以下の Bash コマンドでセッションディレクトリを作成してください（`<slug>` は手順 1 の値に置換）：
@@ -40,7 +62,7 @@ echo "$SESSION_DIR"
 `.claude/agents/style-loader.md` を Read ツールで読み込み、その内容を Agent ツールの prompt に設定して呼び出してください：
 - `subagent_type`: `general-purpose`
 - `description`: `文体プロファイル読み込み`
-- `prompt`: style-loader.md の内容 + 末尾に `\n\nrefreshStyle: {$ARGUMENTS に --refresh-style が含まれていれば true、なければ false}`
+- `prompt`: style-loader.md の内容 + 末尾に `\n\nrefreshStyle: {refreshStyle}`
 
 返却された JSON を `styleProfile` として保持してください。
 
@@ -52,12 +74,10 @@ echo "$SESSION_DIR"
 
 ### 手順
 
-`$ARGUMENTS` から記事 URL を抽出してください（`--local` や `--refresh-style` などのフラグは除外）。
-
 以下の Bash コマンドで既存記事を取得してください：
 
 ```bash
-npx tsx scripts/wp-fetch-post-by-url.ts <記事URL>
+npx tsx scripts/wp-fetch-post-by-url.ts {articleUrl}
 ```
 
 取得結果を `originalArticle` として保持してください。以下のフィールドを含みます：
@@ -227,10 +247,10 @@ article: {article の JSON}
 
 ## Step 8: WordPress 記事更新（オプション）
 
-`$ARGUMENTS` に `--local` が含まれている場合は、このステップをスキップしてください。
+`isLocal` が true の場合は、このステップをスキップしてください。
 `{sessionDir}/article.json` の保存のみで完了です。
 
-`--local` が含まれていない場合は、以下の Bash コマンドを実行して WordPress の既存記事を更新してください：
+`isLocal` が false の場合は、以下の Bash コマンドを実行して WordPress の既存記事を更新してください：
 
 ```bash
 npx tsx scripts/wp-update-post.ts {originalArticle.id} {sessionDir}/article.json

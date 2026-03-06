@@ -1,8 +1,10 @@
 import 'dotenv/config';
 import { readFileSync } from 'fs';
+import { setSeoFields } from './wp-set-seo-fields.js';
 
 interface ArticleData {
   title: string;
+  seoTitle?: string;
   slug?: string;
   htmlContent: string;
   metaDescription: string;
@@ -51,8 +53,14 @@ async function main() {
   }
 
   const result = await response.json();
-  console.log(`Draft published! Post ID: ${(result as any).id}`);
-  console.log(`Edit URL: ${siteUrl}/wp-admin/post.php?post=${(result as any).id}&action=edit`);
+  const postId = (result as any).id as number;
+  console.log(`Draft published! Post ID: ${postId}`);
+  console.log(`Edit URL: ${siteUrl}/wp-admin/post.php?post=${postId}&action=edit`);
+
+  await setSeoFields(postId, {
+    seoTitle: article.seoTitle,
+    metaDescription: article.metaDescription,
+  });
 }
 
 main();

@@ -1,35 +1,57 @@
 ---
 name: screenshot
 description: Playwright MCP を使って Web ページまたはターミナルモックアップのスクリーンショットを撮影する。
-argument-hint: "web <URL> [--output path] [--selector CSS] | terminal <説明テキスト> [--output path]"
+argument-hint: ""
 disable-model-invocation: true
 ---
 
 あなたはスクリーンショット撮影ツールです。Playwright MCP サーバーを使って、Web ページまたはターミナルモックアップのスクリーンショットを撮影します。
 
-以下の手順で `$ARGUMENTS` を解析し、適切なモードで撮影を実行してください。
+---
+
+## Step 0-pre: 対話による入力確認
+
+ユーザーに撮影モードを確認してください：
+
+```
+どのモードで撮影しますか？
+
+1. Web — Webページのスクリーンショット
+2. Terminal — ターミナル風モックアップのスクリーンショット
+```
+
+**Web を選択した場合:**
+
+```
+撮影するURLを教えてください（例: https://example.com）
+特定の要素だけ撮影しますか？（CSSセレクタを指定、不要ならスキップ）
+```
+
+設定:
+- `mode`: `web`
+- `targetUrl`: ユーザーが指定したURL
+- `cssSelector`: 指定があれば設定、なければ null
+- `outputDir`: `output/screenshots/`（デフォルト）
+
+**Terminal を選択した場合:**
+
+```
+ターミナルに表示する内容を教えてください（コマンドと出力の説明）
+```
+
+設定:
+- `mode`: `terminal`
+- `description`: ユーザーが指定した説明
+- `outputDir`: `output/screenshots/`（デフォルト）
 
 ---
 
-## 引数の解析
+## モード判定
 
-`$ARGUMENTS` を以下のルールで解析してください：
+`mode` の値に応じて以下のモードを実行してください：
 
-- 先頭のトークンが `web` → **Web 撮影モード（Mode A）**
-- 先頭のトークンが `terminal` → **ターミナルモック撮影モード（Mode B）**
-
-### 共通オプション
-
-- `--output <path>`: 出力ディレクトリ（デフォルト: `output/screenshots/`）
-
-### Mode A 固有オプション
-
-- 2番目のトークン: 撮影対象 URL
-- `--selector <CSS>`: 特定要素のみ撮影する CSS セレクタ
-
-### Mode B 固有オプション
-
-- `web` / `terminal` キーワードとオプションフラグを除いた残りのテキスト全体が「説明テキスト」
+- `mode` が `web` → **Mode A: Web 撮影**
+- `mode` が `terminal` → **Mode B: ターミナルモック撮影**
 
 ---
 
@@ -40,12 +62,12 @@ disable-model-invocation: true
    Bash ツールで出力ディレクトリを作成してください：
 
    ```bash
-   mkdir -p {output-dir}
+   mkdir -p {outputDir}
    ```
 
 2. **ページを開く**
 
-   `mcp__playwright__browser_navigate` で指定された URL を開いてください。
+   `mcp__playwright__browser_navigate` で `targetUrl` を開いてください。
 
 3. **読み込み待機**
 
@@ -53,11 +75,11 @@ disable-model-invocation: true
 
 4. **撮影**
 
-   - `--selector` が指定されている場合：
+   - `cssSelector` が指定されている場合：
      1. `mcp__playwright__browser_snapshot` でページ構造を取得する
-     2. 指定された CSS セレクタに該当する要素の `ref` を特定する
+     2. `cssSelector` に該当する要素の `ref` を特定する
      3. `mcp__playwright__browser_take_screenshot` でその要素を撮影する
-   - `--selector` が指定されていない場合：
+   - `cssSelector` が null の場合：
      1. `mcp__playwright__browser_take_screenshot` でフルページ撮影する
 
 5. **ファイル名**
@@ -83,7 +105,7 @@ disable-model-invocation: true
    Bash ツールで出力ディレクトリを作成してください：
 
    ```bash
-   mkdir -p {output-dir}
+   mkdir -p {outputDir}
    ```
 
 2. **テンプレートの読み込み**
@@ -92,7 +114,7 @@ disable-model-invocation: true
 
 3. **ターミナル表示内容の設計**
 
-   ユーザーの説明テキストをもとに、ターミナルに表示するコマンドと出力を設計してください。以下の HTML 要素を組み合わせて `{{LINES}}` に入れる行を構築します：
+   `description` をもとに、ターミナルに表示するコマンドと出力を設計してください。以下の HTML 要素を組み合わせて `{{LINES}}` に入れる行を構築します：
 
    - **プロンプト行**: `<div class="line"><span class="prompt">$ </span><span class="command">コマンド</span></div>`
    - **出力行**: `<div class="line"><span class="output">テキスト</span></div>`
@@ -102,16 +124,16 @@ disable-model-invocation: true
    - **コメント行**: `<div class="line"><span class="comment"># テキスト</span></div>`
    - **空行**: `<div class="line"></div>`
 
-   説明テキストの意図を汲み取り、リアルなターミナル出力になるよう工夫してください。
+   `description` の意図を汲み取り、リアルなターミナル出力になるよう工夫してください。
 
 4. **テンプレートの置換**
 
-   - `{{TITLE}}` → 説明テキストから適切なタイトルを生成して置換
+   - `{{TITLE}}` → `description` から適切なタイトルを生成して置換
    - `{{LINES}}` → 手順 3 で構築した HTML 行で置換
 
 5. **一時ファイルの書き出し**
 
-   置換済み HTML を Write ツールで `{output-dir}/_temp-terminal.html` に書き出してください。
+   置換済み HTML を Write ツールで `{outputDir}/_temp-terminal.html` に書き出してください。
 
 6. **HTTP サーバー経由でブラウザに表示**
 
@@ -120,7 +142,7 @@ disable-model-invocation: true
    Bash ツールでバックグラウンドで HTTP サーバーを起動してください：
 
    ```bash
-   python3 -m http.server 3847 --directory {output-dir} &
+   python3 -m http.server 3847 --directory {outputDir} &
    ```
 
    `mcp__playwright__browser_navigate` で `http://localhost:3847/_temp-terminal.html` を開いてください。
@@ -141,14 +163,14 @@ disable-model-invocation: true
    terminal-{slugified-description}-{YYYYMMDD-HHMMSS}.png
    ```
 
-   `slugified-description` は説明テキストの先頭30文字程度をスラッグ化（スペースをハイフンに置換、記号除去）した文字列です。
+   `slugified-description` は `description` の先頭30文字程度をスラッグ化（スペースをハイフンに置換、記号除去）した文字列です。
 
 10. **クリーンアップ**
 
     一時ファイルの削除と HTTP サーバーの停止を行ってください：
 
     ```bash
-    rm {output-dir}/_temp-terminal.html
+    rm {outputDir}/_temp-terminal.html
     kill $(lsof -ti:3847) 2>/dev/null
     ```
 

@@ -9,26 +9,14 @@ WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` 
 ## Skills & Commands
 
 ```bash
-# 記事生成（WordPress に下書き投稿）
-/generate <キーワード>
+# 記事生成（対話形式: キーワード・WP投稿・文体再分析を質問）
+/generate
 
-# 記事生成（ローカル保存のみ、WP投稿スキップ）
-/generate <キーワード> --local
+# 既存記事リライト（対話形式: URL・WP更新・文体再分析を質問）
+/revise
 
-# 記事生成（文体キャッシュを無視して再分析）
-/generate <キーワード> --refresh-style
-
-# 既存記事リライト（WordPress 上の記事を更新）
-/revise <記事URL>
-
-# 既存記事リライト（ローカル保存のみ、WP更新スキップ）
-/revise <記事URL> --local
-
-# 既存記事の部分修正（対話形式でユーザー指示を正確に反映）
-/edit <記事URL>
-
-# 既存記事の部分修正（ローカル保存のみ、WP更新スキップ）
-/edit <記事URL> --local
+# 既存記事の部分修正（対話形式: URL・WP更新を質問）
+/edit
 
 # 記事レビュー（品質チェック、指摘のみ）
 /review [article.json パス]    # デフォルト: output/article.json
@@ -36,11 +24,11 @@ WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` 
 # ファクトチェック（WebSearchで事実検証、指摘のみ）
 /fact-check [article.json パス]  # デフォルト: output/article.json
 
-# スクリーンショット撮影（Webページ）
-/screenshot web <URL> [--output path] [--selector CSS]
+# シリーズ記事生成（対話形式: シリーズ・記事を選択して生成）
+/series-generate
 
-# スクリーンショット撮影（ターミナル風モックアップ）
-/screenshot terminal <説明> [--output path]
+# スクリーンショット撮影（対話形式: モード・URL/説明を質問）
+/screenshot
 
 # WordPress から直近N件の記事を取得
 npm run wp:fetch -- [count]    # default: 5
@@ -61,7 +49,8 @@ npx tsc --noEmit
 ## Architecture
 
 ```
-.claude/skills/generate/SKILL.md    ← 記事生成パイプライン定義（9ステップ）
+.claude/skills/generate/SKILL.md    ← 記事生成パイプライン定義（9ステップ、汎用）
+.claude/skills/series-generate/SKILL.md ← シリーズ記事生成（/generate のラッパー、programming-zero固有）
 .claude/skills/revise/SKILL.md      ← 既存記事リライトパイプライン定義（8ステップ）
 .claude/skills/review/SKILL.md      ← 記事レビューパイプライン定義（3ステップ）
 .claude/skills/fact-check/SKILL.md  ← ファクトチェックパイプライン定義（2ステップ）
@@ -74,8 +63,10 @@ docs/plans/claude-code-series.json  ← シリーズ記事管理ファイル（1
 .claude/agents/fact-checker.md      ← 共通エージェント: 主張抽出+並列WebSearch検証
 scripts/wp-fetch-posts.ts           ← WP REST API: 既存記事取得（複数）
 scripts/wp-fetch-post-by-url.ts     ← WP REST API: URL指定で単一記事取得
-scripts/wp-publish-draft.ts         ← WP REST API: 下書き投稿
-scripts/wp-update-post.ts           ← WP REST API: 既存記事更新
+scripts/wp-publish-draft.ts         ← WP REST API: 下書き投稿（+ SEOフィールド自動設定）
+scripts/wp-update-post.ts           ← WP REST API: 既存記事更新（+ SEOフィールド自動設定）
+scripts/wp-set-seo-fields.ts        ← XML-RPC: テーマSEOフィールド設定（THE THOR対応）
+docs/wp-theme-the-thor.md           ← THE THORテーマ固有の設定・API対応ガイド
 output/{sessionDir}/article.json     ← 生成された記事データ（gitignore対象）
 output/{sessionDir}/review.json     ← レビュー結果（gitignore対象）
 output/{sessionDir}/fact-check.json ← ファクトチェック結果（gitignore対象）
@@ -160,6 +151,7 @@ Step 0〜6 が実行される（Step 3 は修正完了までループ）:
 ```json
 {
   "title": "記事タイトル",
+  "seoTitle": "SEOタイトル（titleタグ用。省略時はtitleを使用）",
   "slug": "english-hyphenated-slug",
   "htmlContent": "<h2>...</h2><p>...</p>...",
   "metaDescription": "メタディスクリプション",
@@ -167,6 +159,7 @@ Step 0〜6 が実行される（Step 3 は修正完了までループ）:
 }
 ```
 
+- `seoTitle`: THE THORテーマの「title設定」フィールド。検索結果に表示される `<title>` タグ。投稿タイトルとは別にSEO用に最適化可能。
 - `slug`: パーマリンク。`/generate` では既存記事のスラッグパターンを WP API で取得・分析して同じスタイルで新規生成。`/revise` `/edit` では既存スラッグを維持。
 
 ### 文体キャッシュ（`cache/style-profiles/`）
@@ -178,7 +171,8 @@ Step 0〜6 が実行される（Step 3 は修正完了までループ）:
 
 ## WordPress API
 
-- REST API + Basic Auth（Application Password）
+- REST API + Basic Auth（Application Password）で投稿・更新
+- SEOフィールドはテーマ固有のカスタムフィールド → 詳細は [docs/wp-theme-the-thor.md](docs/wp-theme-the-thor.md) を参照
 - 認証情報は `.env` に格納（`WP_SITE_URL`, `WP_USERNAME`, `WP_APP_PASSWORD`）
 
 ## Tech Stack

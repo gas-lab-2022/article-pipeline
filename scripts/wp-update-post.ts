@@ -1,8 +1,10 @@
 import 'dotenv/config';
 import { readFileSync } from 'fs';
+import { setSeoFields } from './wp-set-seo-fields.js';
 
 interface ArticleData {
   title: string;
+  seoTitle?: string;
   slug?: string;
   htmlContent: string;
   metaDescription: string;
@@ -10,10 +12,10 @@ interface ArticleData {
 }
 
 async function main() {
-  const postId = process.argv[2];
+  const postIdArg = process.argv[2];
   const filePath = process.argv[3];
 
-  if (!postId || !filePath) {
+  if (!postIdArg || !filePath) {
     console.error('Usage: npx tsx scripts/wp-update-post.ts <postId> <article.json>');
     process.exit(1);
   }
@@ -29,7 +31,7 @@ async function main() {
 
   const article: ArticleData = JSON.parse(readFileSync(filePath, 'utf-8'));
   const credentials = Buffer.from(`${username}:${appPassword}`).toString('base64');
-  const url = `${siteUrl}/wp-json/wp/v2/posts/${postId}`;
+  const url = `${siteUrl}/wp-json/wp/v2/posts/${postIdArg}`;
 
   const response = await fetch(url, {
     method: 'PUT',
@@ -52,8 +54,14 @@ async function main() {
   }
 
   const result = await response.json();
-  console.log(`Post updated! Post ID: ${(result as any).id}`);
-  console.log(`Edit URL: ${siteUrl}/wp-admin/post.php?post=${(result as any).id}&action=edit`);
+  const postId = (result as any).id as number;
+  console.log(`Post updated! Post ID: ${postId}`);
+  console.log(`Edit URL: ${siteUrl}/wp-admin/post.php?post=${postId}&action=edit`);
+
+  await setSeoFields(postId, {
+    seoTitle: article.seoTitle,
+    metaDescription: article.metaDescription,
+  });
 }
 
 main();

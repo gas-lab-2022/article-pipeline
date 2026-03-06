@@ -1,12 +1,31 @@
 ---
 name: edit
 description: WordPress上の既存記事をユーザーの修正指示に基づいて対話的に部分修正するパイプライン。指示された箇所だけを正確に変更し、それ以外は一切変えない。
-argument-hint: "<記事URL> [--local]"
+argument-hint: "[記事URL]"
 disable-model-invocation: true
 ---
 
 あなたは WordPress ブログの記事修正エージェントです。対象サイトは `.env` の `WP_SITE_URL` で指定されたサイトです。
-以下の手順を実行し、ユーザーの修正指示に基づいて既存記事を正確に部分修正してください。
+
+---
+
+## Step 0-pre: 対話による入力確認
+
+`$ARGUMENTS` に記事URLが含まれていない場合は、ユーザーに質問してください：
+
+```
+修正する記事のURLを教えてください（例: https://example.com/article-slug/）
+```
+
+次に確認してください：
+
+```
+修正後、WordPress の記事を更新しますか？（デフォルト: はい）
+```
+
+回答をもとに以下を設定：
+- `articleUrl`: 修正対象の記事URL
+- `isLocal`: WP更新しない場合は true
 
 **重要なルール:**
 - ユーザーが指示した箇所**だけ**を変更し、それ以外の部分は一切変えないでください
@@ -20,7 +39,7 @@ disable-model-invocation: true
 
 ### 手順
 
-1. `$ARGUMENTS` から記事 URL を抽出し、URL のスラッグ部分を取得してください（`--local` フラグは除外）。
+1. `articleUrl` からURL のスラッグ部分を取得してください。
    - 例: `https://example.com/react-hooks-guide/` → `react-hooks-guide`
    - 例: `https://example.com/?p=123` → `p123`
 2. 以下の Bash コマンドでセッションディレクトリを作成してください（`<slug>` は手順 1 の値に置換）：
@@ -52,12 +71,10 @@ echo "$SESSION_DIR"
 
 ### 手順
 
-`$ARGUMENTS` から記事 URL を抽出してください（`--local` などのフラグは除外）。
-
 以下の Bash コマンドで既存記事を取得してください：
 
 ```bash
-npx tsx scripts/wp-fetch-post-by-url.ts <記事URL>
+npx tsx scripts/wp-fetch-post-by-url.ts <articleUrl>
 ```
 
 取得結果を `originalArticle` として保持してください。以下のフィールドを含みます：
@@ -218,7 +235,7 @@ AskUserQuestion ツールで最終確認を行ってください：
   - 「修正に戻る」: Step 3 の修正ループに戻る
   - 「ローカル保存のみで終了」: WP 更新をスキップして完了
 
-`$ARGUMENTS` に `--local` が含まれている場合は、このステップをスキップしてください。
+`isLocal` が true の場合は、このステップをスキップしてください。
 `{sessionDir}/article.json` の保存のみで完了です。
 
 ### 6-2. WordPress 更新
