@@ -105,7 +105,7 @@ Step 0〜9 が順番に実行され、各ステップの出力が次のステッ
 6. **本文生成** → `{sessionDir}/article.json`（HTML 形式の記事本文）
 7. **記事レビュー** → `{sessionDir}/review.json`（article-reviewer エージェントに委任）
 8. **ファクトチェック** → `{sessionDir}/fact-check.json`（fact-checker エージェントに委任）
-9. **WP投稿**（`--local` 指定時はスキップ）
+9. **WP投稿**（対話で「いいえ」選択時はスキップ）
 
 ### 既存記事リライトパイプライン（`/revise`）
 
@@ -119,7 +119,7 @@ Step 0〜8 が順番に実行され、各ステップの出力が次のステッ
 5. **本文リライト** → `{sessionDir}/article.json`（HTML 形式のリライト記事）
 6. **記事レビュー** → `{sessionDir}/review.json`（article-reviewer エージェントに委任）
 7. **ファクトチェック** → `{sessionDir}/fact-check.json`（fact-checker エージェントに委任）
-8. **WP更新**（`--local` 指定時はスキップ）
+8. **WP更新**（対話で「いいえ」選択時はスキップ）
 
 ### 記事レビューパイプライン（`/review`）
 
@@ -146,7 +146,7 @@ Step 0〜6 が実行される（Step 3 は修正完了までループ）:
 3. **修正ループ** → ユーザー指示に基づく部分修正（指示→反映→差分表示→繰り返し）
 4. **記事書き出し** → `{sessionDir}/article.json`
 5. **記事レビュー** → `{sessionDir}/review.json`（article-reviewer エージェントに委任）
-6. **最終確認 & WP更新**（ユーザー承認後。`--local` 指定時はスキップ）
+6. **最終確認 & WP更新**（ユーザー承認後。対話で「いいえ」選択時はスキップ）
 
 ### article.json フォーマット
 

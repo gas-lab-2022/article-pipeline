@@ -1,14 +1,12 @@
 ---
 name: series-generate
 description: シリーズ計画に基づいて記事を生成する。対話形式でシリーズ・記事を選択し、内部リンクコンテキストを構築した上で /generate に委任。
-argument-hint: "[--local]"
+argument-hint: ""
 disable-model-invocation: true
 ---
 
 あなたはシリーズ記事の生成パイプラインです。
 対話形式でシリーズと対象記事を選択し、内部リンクコンテキストを構築した上で、汎用の `/generate` パイプラインに記事生成を委任します。
-
-`$ARGUMENTS` に `--local` が含まれている場合は、WP投稿をスキップするフラグとして保持してください。
 
 ---
 
@@ -156,7 +154,7 @@ main();
 
 `.claude/skills/generate/SKILL.md` を Read ツールで読み込み、そのすべての手順に従って記事を生成してください。
 
-**キーワード引数**: `targetArticle.keyword`（`--local` フラグがあればそれも付与）
+**キーワード引数**: `targetArticle.keyword`
 
 **重要**: Phase 1 で構築した `seriesContext` は会話中に存在しています。`/generate` の Step 5（アウトライン）と Step 6（本文生成）で自然に活用されます。
 
@@ -166,7 +164,7 @@ main();
 
 ### Step 3-1: SEOフィールド設定
 
-`/generate` が WP に投稿した場合（`--local` でない場合）、article.json の `seoTitle` と `metaDescription` を確認し、設定されていることを確認してください。
+`/generate` が WP に投稿した場合（`isLocal` が false の場合）、article.json の `seoTitle` と `metaDescription` を確認し、設定されていることを確認してください。
 
 `/generate` の Step 9 で `wp-publish-draft.ts` が実行されると、SEOフィールドは自動設定されます。
 
@@ -174,9 +172,9 @@ main();
 
 読み込んだシリーズ計画ファイルの対象記事エントリを更新してください（Edit ツール使用）：
 
-- `status`: `"generated"`（`--local` の場合）または `"wp-draft"`（WP投稿済みの場合）
-- `wpPostId`: WP投稿時の Post ID（`--local` の場合は null のまま）
-- `wpUrl`: WP投稿時の記事URL（`--local` の場合は null のまま）
+- `status`: `"generated"`（`isLocal` が true の場合）または `"wp-draft"`（WP投稿済みの場合）
+- `wpPostId`: WP投稿時の Post ID（`isLocal` が true の場合は null のまま）
+- `wpUrl`: WP投稿時の記事URL（`isLocal` が true の場合は null のまま）
 
 ### Step 3-3: 内部リンク追加の提案
 

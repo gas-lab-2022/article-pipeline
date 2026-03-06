@@ -286,7 +286,7 @@ article: {article の JSON}
 `isLocal` が true の場合は、このステップをスキップしてください。
 `{sessionDir}/article.json` の保存のみで完了です。
 
-`--local` が含まれていない場合は、以下の Bash コマンドを実行して WordPress に下書き投稿してください：
+`isLocal` が false の場合は、以下の Bash コマンドを実行して WordPress に下書き投稿してください：
 
 ```bash
 npx tsx scripts/wp-publish-draft.ts {sessionDir}/article.json
