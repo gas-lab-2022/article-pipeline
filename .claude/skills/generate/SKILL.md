@@ -427,12 +427,12 @@ kill $(lsof -ti:3847) 2>/dev/null
 - `prompt`: article-reviewer.md の内容 + 末尾に以下を付与：
 
 ```
-outputPath: {sessionDir}/review.json
+outputPath: {sessionDir}/review.md
 styleProfile: {styleProfile の JSON}
 article: {article の JSON}
 ```
 
-エージェントが `{sessionDir}/review.json` を書き出します。返却テキストからスコアとサマリーを取得してください。
+エージェントが `{sessionDir}/review.md` を書き出します。返却テキストからスコアとサマリーを取得してください。
 
 ---
 
@@ -444,11 +444,11 @@ article: {article の JSON}
 - `prompt`: fact-checker.md の内容 + 末尾に以下を付与：
 
 ```
-outputPath: {sessionDir}/fact-check.json
+outputPath: {sessionDir}/fact-check.md
 article: {article の JSON}
 ```
 
-エージェントが `{sessionDir}/fact-check.json` を書き出します。返却テキストから総合判定とサマリーを取得してください。
+エージェントが `{sessionDir}/fact-check.md` を書き出します。返却テキストから総合判定とサマリーを取得してください。
 
 ---
 
@@ -476,8 +476,8 @@ mkdir -p articles/{slug}/screenshots
 以下のファイルを Write ツールで `articles/{slug}/` に書き出してください：
 
 1. **article.json**: `{sessionDir}/article.json` の内容をそのままコピー
-2. **review.json**: `{sessionDir}/review.json` の内容をそのままコピー
-3. **fact-check.json**: `{sessionDir}/fact-check.json` の内容をそのままコピー
+2. **review.md**: `{sessionDir}/review.md` の内容をそのままコピー
+3. **fact-check.md**: `{sessionDir}/fact-check.md` の内容をそのままコピー
 
 `{sessionDir}/screenshots/` にファイルがある場合は Bash でコピー：
 
@@ -541,11 +541,11 @@ gh pr create --title "article: {title}" --body "$(cat <<'PREOF'
 
 ### Auto Review
 - **Score**: {overallScore}/100
-- {review.json の主要な指摘をサマリー（3行程度）}
+- {review.md の主要な指摘をサマリー（3行程度）}
 
 ### Fact Check
 - **Verdict**: {overallVerdict}
-- {fact-check.json の主要な結果をサマリー（3行程度）}
+- {fact-check.md の主要な結果をサマリー（3行程度）}
 
 ---
 
@@ -579,7 +579,7 @@ PR が作成されたら、PR URL を取得して表示してください。
 - 記事タイトル
 - `{sessionDir}/article.json` のパス（ローカル作業用）
 - `articles/{slug}/article.md` のパス（PR レビュー用）
-- レビュー結果の総合評価（`{sessionDir}/review.json`）
-- ファクトチェック結果の総合判定（`{sessionDir}/fact-check.json`）
+- レビュー結果の総合評価（`{sessionDir}/review.md`）
+- ファクトチェック結果の総合判定（`{sessionDir}/fact-check.md`）
 - PR を作成した場合は PR URL
 - 手動タスクがある場合: 件数と PR 上での作業手順

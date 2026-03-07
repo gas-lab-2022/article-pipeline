@@ -5,7 +5,7 @@
 ## 入力
 
 このプロンプトの末尾に以下が付与されます：
-- `outputPath`: review.json の書き出し先パス
+- `outputPath`: review.md の書き出し先パス
 - `styleProfile`: 文体プロファイル JSON
 - `article`: 記事データ JSON（title, htmlContent, metaDescription, tags）
 
@@ -148,22 +148,45 @@
 
 ## ファイル出力
 
-結果を以下の JSON フォーマットで `{outputPath}` に Write ツールで書き出してください：
+結果を以下の Markdown フォーマットで `{outputPath}` に Write ツールで書き出してください：
 
-```json
-{
-  "reviewedAt": "ISO 8601形式の現在日時",
-  "articleTitle": "記事タイトル",
-  "categories": {
-    "seo": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
-    "structure": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
-    "readability": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
-    "styleConsistency": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] },
-    "accuracy": { "score": "A|B|C", "findings": ["指摘1", "指摘2"] }
-  },
-  "overallScore": "A|B|C",
-  "summary": "総合的なレビューコメント"
-}
+```markdown
+# 記事レビュー
+
+- **レビュー日時**: {ISO 8601形式の現在日時}
+- **記事タイトル**: {記事タイトル}
+- **総合評価**: {overallScore}
+
+## サマリー
+
+{summary}
+
+## カテゴリ別評価
+
+### SEO: {score}
+
+- 指摘1
+- 指摘2
+
+### 構成: {score}
+
+- 指摘1
+- 指摘2
+
+### 可読性: {score}
+
+- 指摘1
+- 指摘2
+
+### 文体一貫性: {score}
+
+- 指摘1
+- 指摘2
+
+### 正確性: {score}
+
+- 指摘1
+- 指摘2
 ```
 
 ## コンソール表示

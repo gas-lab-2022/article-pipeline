@@ -8,17 +8,16 @@ designDoc: docs/series/claude-code/design.md
 - **Title**: Claude Codeとは？できること・特徴をわかりやすく解説
 - **Sub KW**: 何ができる, 初心者
 - **Priority**: 1
-- **Status**: wp-draft
-- **WP Post ID**: 6911
+- **Status**: pr-created
 - **Related**: 2, 3, 4
+- **PR URL**: https://github.com/gas-lab-2022/article-pipeline/pull/3
 - **Description**: Claude Codeの概要・特徴を初心者向けに解説。ターミナルベースのAIコーディングツールとは何か。
 
 ## #2 — claude code 料金【知る】
 - **Title**: Claude Codeの料金プランを徹底解説【無料で使える？】
 - **Sub KW**: 無料, plans, pricing, pro, max, 月額, 価格, api料金
 - **Priority**: 2
-- **Status**: wp-draft
-- **WP Post ID**: 6914
+- **Status**: draft
 - **Related**: 1, 3, 4
 - **Description**: 料金プラン（Max/Pro/API）の詳細比較。無料枠の有無、コスパの良い選び方。
 

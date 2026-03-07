@@ -220,12 +220,12 @@ npx tsx scripts/wp-fetch-post-by-url.ts {articleUrl}
 - `prompt`: article-reviewer.md の内容 + 末尾に以下を付与：
 
 ```
-outputPath: {sessionDir}/review.json
+outputPath: {sessionDir}/review.md
 styleProfile: {styleProfile の JSON}
 article: {article の JSON}
 ```
 
-エージェントが `{sessionDir}/review.json` を書き出します。返却テキストからスコアとサマリーを取得してください。
+エージェントが `{sessionDir}/review.md` を書き出します。返却テキストからスコアとサマリーを取得してください。
 
 ---
 
@@ -237,11 +237,11 @@ article: {article の JSON}
 - `prompt`: fact-checker.md の内容 + 末尾に以下を付与：
 
 ```
-outputPath: {sessionDir}/fact-check.json
+outputPath: {sessionDir}/fact-check.md
 article: {article の JSON}
 ```
 
-エージェントが `{sessionDir}/fact-check.json` を書き出します。返却テキストから総合判定とサマリーを取得してください。
+エージェントが `{sessionDir}/fact-check.md` を書き出します。返却テキストから総合判定とサマリーを取得してください。
 
 ---
 
@@ -268,6 +268,6 @@ npx tsx scripts/wp-update-post.ts {originalArticle.id} {sessionDir}/article.json
 - 元の記事タイトル → リライト後のタイトル
 - 主な改善点（箇条書き3〜5個）
 - `{sessionDir}/article.json` のパス
-- レビュー結果の総合評価（`{sessionDir}/review.json`）
-- ファクトチェック結果の総合判定（`{sessionDir}/fact-check.json`）
+- レビュー結果の総合評価（`{sessionDir}/review.md`）
+- ファクトチェック結果の総合判定（`{sessionDir}/fact-check.md`）
 - WordPress を更新した場合は編集 URL

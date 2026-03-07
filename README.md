@@ -112,8 +112,8 @@ articles/                Reviewed articles (git-tracked, via PR)
   {slug}/                  Per-article directory
     article.json             WP publish data
     article.md               Review-friendly Markdown
-    review.json              Auto-review results
-    fact-check.json          Fact-check results
+    review.md                Auto-review results
+    fact-check.md            Fact-check results
     screenshots/             Article screenshots
 
 .github/workflows/       CI/CD

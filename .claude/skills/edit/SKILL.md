@@ -213,12 +213,12 @@ Write ツールで `{sessionDir}/article.json` に書き出してください。
 - `prompt`: article-reviewer.md の内容 + 末尾に以下を付与：
 
 ```
-outputPath: {sessionDir}/review.json
+outputPath: {sessionDir}/review.md
 styleProfile: {styleProfile の JSON}
 article: {article の JSON}
 ```
 
-エージェントが `{sessionDir}/review.json` を書き出します。返却テキストからスコアとサマリーを取得してください。
+エージェントが `{sessionDir}/review.md` を書き出します。返却テキストからスコアとサマリーを取得してください。
 
 ---
 
@@ -256,5 +256,5 @@ npx tsx scripts/wp-update-post.ts {originalArticle.id} {sessionDir}/article.json
 - 記事タイトル
 - 修正した箇所の概要（箇条書き）
 - `{sessionDir}/article.json` のパス
-- レビュー結果の総合評価（`{sessionDir}/review.json`）
+- レビュー結果の総合評価（`{sessionDir}/review.md`）
 - WordPress を更新した場合は編集 URL
