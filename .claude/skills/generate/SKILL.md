@@ -1,6 +1,6 @@
 ---
 name: generate
-description: SEO最適化された日本語ブログ記事を9ステップで生成し、WordPressに下書き投稿する記事生成パイプライン。
+description: SEO最適化された日本語ブログ記事を9ステップで生成し、レビュー用PRを作成する記事生成パイプライン。PRマージ時にGitHub ActionsでWPに自動投稿。
 argument-hint: "[キーワード]"
 disable-model-invocation: true
 ---
@@ -21,16 +21,17 @@ disable-model-invocation: true
 
 ```
 以下のオプションを確認します：
-1. WordPress に下書き投稿しますか？（デフォルト: はい）
+1. レビュー用の PR を作成しますか？（デフォルト: はい）
+   ※ PR マージ時に GitHub Actions で WP に自動投稿されます
 2. 文体キャッシュを再分析しますか？（デフォルト: いいえ、キャッシュを使用）
 ```
 
 回答をもとに以下を設定：
 - `keyword`: ユーザーが指定したキーワード（`$ARGUMENTS` にあればそれを使用）
-- `isLocal`: WP投稿しない場合は true
+- `isLocal`: PR を作成しない場合は true（ローカル確認のみ）
 - `refreshStyle`: 文体を再分析する場合は true
 
-以降、すべてのステップの結果をコンテキストとして保持し、最終的に WordPress に下書き投稿してください（`isLocal` が true の場合はスキップ）。
+以降、すべてのステップの結果をコンテキストとして保持し、最終的に PR を作成してください（`isLocal` が true の場合はスキップ）。
 
 ---
 
@@ -451,20 +452,124 @@ article: {article の JSON}
 
 ---
 
-## Step 9: WordPress 下書き投稿（オプション）
+## Step 9: PR 作成（オプション）
 
 `isLocal` が true の場合は、このステップをスキップしてください。
 `{sessionDir}/article.json` の保存のみで完了です。
 
-`isLocal` が false の場合は、以下の Bash コマンドを実行して WordPress に下書き投稿してください：
+`isLocal` が false の場合は、以下の手順で PR を作成してください。
+
+### 9-1. ブランチ作成
 
 ```bash
-npx tsx scripts/wp-publish-draft.ts {sessionDir}/article.json
+git checkout -b article/{slug}
 ```
 
-投稿が成功したら、Post ID と編集 URL を表示してください。
+### 9-2. ファイル配置
 
-`{sessionDir}/handson-tasks.json` が存在する場合、投稿で得た Post ID を `wpPostId` フィールドに書き込んでください（Edit ツール使用）。
+`articles/{slug}/` ディレクトリを作成し、ファイルを配置してください：
+
+```bash
+mkdir -p articles/{slug}/screenshots
+```
+
+以下のファイルを Write ツールで `articles/{slug}/` に書き出してください：
+
+1. **article.json**: `{sessionDir}/article.json` の内容をそのままコピー
+2. **review.json**: `{sessionDir}/review.json` の内容をそのままコピー
+3. **fact-check.json**: `{sessionDir}/fact-check.json` の内容をそのままコピー
+
+`{sessionDir}/screenshots/` にファイルがある場合は Bash でコピー：
+
+```bash
+cp {sessionDir}/screenshots/*.png articles/{slug}/screenshots/ 2>/dev/null || true
+```
+
+### 9-3. article.md の生成
+
+`article.json` の内容をレビュー用の Markdown ファイルとして `articles/{slug}/article.md` に変換・書き出してください。
+
+フォーマット：
+
+```markdown
+---
+title: "{title}"
+slug: "{slug}"
+metaDescription: "{metaDescription}"
+tags: [{tags}]
+---
+
+（htmlContent を Markdown に変換した本文）
+```
+
+変換ルール：
+- `<h2>` → `## `
+- `<h3>` → `### `
+- `<p>` → 段落テキスト（タグ除去）
+- `<a href="URL">text</a>` → `[text](URL)`
+- `<strong>` → `**text**`
+- `<em>` → `*text*`
+- `<ul><li>` → `- item`
+- `<ol><li>` → `1. item`
+- `<figure>` → `![alt](src)`（画像）
+- `<code>` → `` `code` ``
+- `<pre>` → コードブロック
+- その他の HTML タグ → タグ除去してテキストのみ残す
+
+### 9-4. コミット & プッシュ
+
+```bash
+git add articles/{slug}/
+git commit -m "feat: add article '{title}'"
+git push -u origin article/{slug}
+```
+
+### 9-5. PR 作成
+
+`gh pr create` で PR を作成してください。PR body は以下のテンプレートで生成：
+
+```
+gh pr create --title "article: {title}" --body "$(cat <<'PREOF'
+## {title}
+
+**Keyword**: {keyword}
+**Slug**: {slug}
+**Meta Description**: {metaDescription}
+**Tags**: {tags をカンマ区切り}
+
+---
+
+### Auto Review
+- **Score**: {overallScore}/100
+- {review.json の主要な指摘をサマリー（3行程度）}
+
+### Fact Check
+- **Verdict**: {overallVerdict}
+- {fact-check.json の主要な結果をサマリー（3行程度）}
+
+---
+
+{manualTasks がある場合のみ以下のセクションを出力}
+### Manual Tasks
+- [ ] {task1 description}
+- [ ] {task2 description}
+...
+
+Manual tasks can be completed by committing to this branch:
+- Screenshots: add to `articles/{slug}/screenshots/`
+- Text data: comment on this PR
+
+---
+
+### Review Checklist
+- [ ] 事実関係に誤りがないか
+- [ ] 読者にとって分かりやすいか
+- [ ] 文体がサイトのトーンに合っているか
+PREOF
+)"
+```
+
+PR が作成されたら、PR URL を取得して表示してください。
 
 ---
 
@@ -472,8 +577,9 @@ npx tsx scripts/wp-publish-draft.ts {sessionDir}/article.json
 
 すべてのステップが完了しました。以下をまとめて報告してください：
 - 記事タイトル
-- `{sessionDir}/article.json` のパス
+- `{sessionDir}/article.json` のパス（ローカル作業用）
+- `articles/{slug}/article.md` のパス（PR レビュー用）
 - レビュー結果の総合評価（`{sessionDir}/review.json`）
 - ファクトチェック結果の総合判定（`{sessionDir}/fact-check.json`）
-- WordPress に投稿した場合は編集 URL
-- 手動タスクがある場合: 件数と `/incorporate {sessionDir}` の案内
+- PR を作成した場合は PR URL
+- 手動タスクがある場合: 件数と PR 上での作業手順

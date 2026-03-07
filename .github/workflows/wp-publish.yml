@@ -1,0 +1,50 @@
+name: Publish to WordPress
+
+on:
+  push:
+    branches: [main]
+    paths: ['articles/*/article.json']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - run: npm ci
+
+      - name: Detect changed articles
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'articles/*/article.json' | tr '\n' ' ')
+          echo "files=$CHANGED" >> "$GITHUB_OUTPUT"
+
+      - name: Publish to WordPress
+        if: steps.changed.outputs.files != ''
+        env:
+          WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+          WP_USERNAME: ${{ secrets.WP_USERNAME }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          WP_SEO_METHOD: ${{ secrets.WP_SEO_METHOD }}
+          WP_SEO_TITLE_KEY: ${{ secrets.WP_SEO_TITLE_KEY }}
+          WP_SEO_DESC_KEY: ${{ secrets.WP_SEO_DESC_KEY }}
+        run: |
+          for f in ${{ steps.changed.outputs.files }}; do
+            echo "Publishing: $f"
+            npx tsx scripts/wp-publish-draft.ts "$f"
+          done
+
+      - name: Summary
+        if: steps.changed.outputs.files != ''
+        run: |
+          echo "## Published Articles" >> "$GITHUB_STEP_SUMMARY"
+          for f in ${{ steps.changed.outputs.files }}; do
+            TITLE=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$f','utf8')).title)")
+            echo "- **$TITLE** (\`$f\`)" >> "$GITHUB_STEP_SUMMARY"
+          done

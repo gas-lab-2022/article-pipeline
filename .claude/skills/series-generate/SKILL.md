@@ -161,19 +161,19 @@ main();
 
 ## Phase 3: シリーズ後処理
 
-### Step 3-1: SEOフィールド設定
+### Step 3-1: SEOフィールド確認
 
-`/generate` が WP に投稿した場合（`isLocal` が false の場合）、article.json の `seoTitle` と `metaDescription` を確認し、設定されていることを確認してください。
-
-`/generate` の Step 9 で `wp-publish-draft.ts` が実行されると、SEOフィールドは自動設定されます。
+article.json に `seoTitle` と `metaDescription` が設定されていることを確認してください。
+これらは PR マージ時に GitHub Actions が WP 投稿する際に自動設定されます。
 
 ### Step 3-2: シリーズ計画の更新
 
 読み込んだシリーズ計画ファイルの対象記事エントリを更新してください（Edit ツール使用）：
 
-- `status`: `"generated"`（`isLocal` が true の場合）または `"wp-draft"`（WP投稿済みの場合）
-- `wpPostId`: WP投稿時の Post ID（`isLocal` が true の場合は null のまま）
-- `wpUrl`: WP投稿時の記事URL（`isLocal` が true の場合は null のまま）
+- `status`: `"generated"`（`isLocal` が true の場合）または `"pr-created"`（PR作成済みの場合）
+- `wpPostId`: null（PR マージ後に GitHub Actions が投稿するため、この時点では不明）
+- `wpUrl`: null（同上）
+- `prUrl`: PR の URL（`isLocal` が true の場合は null）
 
 ### Step 3-3: 内部リンク追加の提案
 
