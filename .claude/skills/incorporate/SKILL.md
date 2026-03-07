@@ -54,7 +54,7 @@ WP Post ID: {wpPostId}
 
 選択されたタスク（または全タスク）について、`type` に応じて処理してください。
 
-### type: screenshot
+### type: screenshot / cc-screenshot
 
 ```
 タスク #{id}: {description}
@@ -65,14 +65,18 @@ WP Post ID: {wpPostId}
 ユーザーからファイルパスを受け取ったら：
 
 1. Read ツールで画像ファイルが存在することを確認
-2. WP メディアライブラリにアップロード：
+2. `cc-screenshot` の場合は以下を検証し、問題があればユーザーに指摘：
+   - 画像が鮮明で文字が読めるか
+   - 記事の説明と画面の内容が一致しているか
+   - 個人情報・機密情報（フルパス、API キー、トークン等）が映り込んでいないか
+3. WP メディアライブラリにアップロード：
 
    ```bash
    npx tsx scripts/wp-upload-media.ts "{filePath}" "{altText}"
    ```
 
-3. 出力の JSON から `url` を取得
-4. 記事 HTML 内の `<!-- HANDSON:{id} -->` を以下に置換：
+4. 出力の JSON から `url` を取得
+5. 記事 HTML 内の `<!-- HANDSON:{id} -->` を以下に置換：
 
    ```html
    <figure class="wp-block-image"><img src="{url}" alt="{altText}" /><figcaption>{description}</figcaption></figure>

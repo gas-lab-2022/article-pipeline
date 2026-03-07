@@ -123,7 +123,7 @@ output/                  Working files (gitignored)
   {sessionDir}/            Session-specific directory
 
 cache/                   Cached data (gitignored)
-  style-profiles/          Domain-specific style profiles (TTL: 30 days)
+  style-profiles/          Domain-specific style profiles
 
 docs/series/             Series planning files
 ```

@@ -22,13 +22,11 @@ disable-model-invocation: true
 ```
 以下のオプションを確認します：
 1. WordPress の記事を更新しますか？（デフォルト: はい）
-2. 文体キャッシュを再分析しますか？（デフォルト: いいえ、キャッシュを使用）
 ```
 
 回答をもとに以下を設定：
 - `articleUrl`: リライト対象の記事URL
 - `isLocal`: WP更新しない場合は true
-- `refreshStyle`: 文体を再分析する場合は true
 
 以降、すべてのステップの結果をコンテキストとして保持し、最終的に WordPress の既存記事を更新してください（`isLocal` が true の場合はスキップ）。
 
@@ -62,7 +60,7 @@ echo "$SESSION_DIR"
 `.claude/agents/style-loader.md` を Read ツールで読み込み、その内容を Agent ツールの prompt に設定して呼び出してください：
 - `subagent_type`: `general-purpose`
 - `description`: `文体プロファイル読み込み`
-- `prompt`: style-loader.md の内容 + 末尾に `\n\nrefreshStyle: {refreshStyle}`
+- `prompt`: style-loader.md の内容
 
 返却された JSON を `styleProfile` として保持してください。
 

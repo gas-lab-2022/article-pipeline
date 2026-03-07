@@ -61,7 +61,7 @@ echo "$SESSION_DIR"
 `.claude/agents/style-loader.md` を Read ツールで読み込み、その内容を Agent ツールの prompt に設定して呼び出してください：
 - `subagent_type`: `general-purpose`
 - `description`: `文体プロファイル読み込み`
-- `prompt`: style-loader.md の内容 + 末尾に `\n\nrefreshStyle: false`
+- `prompt`: style-loader.md の内容
 
 返却された JSON を `styleProfile` として保持してください。
 
