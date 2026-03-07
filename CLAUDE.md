@@ -30,6 +30,9 @@ WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` 
 # シリーズ記事生成（対話形式: シリーズ・記事を選択して生成）
 /series-generate
 
+# シリーズ進捗ステータス表示
+/series-status
+
 # 手動で収集した実体験データを記事に反映
 /incorporate [セッションディレクトリ]
 
@@ -62,7 +65,8 @@ npx tsc --noEmit
 
 ```
 .claude/skills/generate/SKILL.md    ← 記事生成パイプライン定義（9ステップ、汎用）
-.claude/skills/series-generate/SKILL.md ← シリーズ記事生成（3フェーズ: 前処理→/generate委任→後処理、docs/series/*-series.json を使用）
+.claude/skills/series-generate/SKILL.md ← シリーズ記事生成（3フェーズ: 前処理→/generate委任→後処理、docs/series/*/series.md を使用）
+.claude/skills/series-status/SKILL.md  ← シリーズ進捗ステータス表示
 .claude/skills/revise/SKILL.md      ← 既存記事リライトパイプライン定義（8ステップ）
 .claude/skills/review/SKILL.md      ← 記事レビューパイプライン定義（3ステップ）
 .claude/skills/fact-check/SKILL.md  ← ファクトチェックパイプライン定義（2ステップ）
@@ -73,7 +77,8 @@ npx tsc --noEmit
 templates/terminal-mockup.html      ← ターミナル風HTMLテンプレート
 templates/claude-code-mockup.html   ← Claude Code UI 再現HTMLテンプレート（14コンポーネント）
 templates/cc-mascot.png             ← Claude Code マスコット画像（クロップ済み）
-docs/series/claude-code-series.json ← シリーズ記事管理ファイル（16記事）
+docs/series/{slug}/series.md       ← シリーズ記事管理ファイル（Markdown + YAML frontmatter）
+docs/series/{slug}/design.md       ← シリーズ設計ドキュメント（任意）
 .claude/agents/style-loader.md      ← 共通エージェント: 文体キャッシュ読込/分析
 .claude/agents/article-reviewer.md  ← 共通エージェント: 5カテゴリ並列レビュー
 .claude/agents/fact-checker.md      ← 共通エージェント: 主張抽出+並列WebSearch検証
