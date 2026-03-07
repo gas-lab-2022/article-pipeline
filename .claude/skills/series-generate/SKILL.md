@@ -13,7 +13,7 @@ disable-model-invocation: true
 
 ### Step 1-1: シリーズの選択
 
-`docs/series/` 配下の `*-series.json` ファイルを Glob ツールで検索してください。
+`docs/series/*/series.md` を Glob ツールで検索してください。
 
 **0件の場合:**
 
@@ -24,16 +24,17 @@ disable-model-invocation: true
 新しいシリーズ計画を作成しますか？（作成する場合、シリーズ名とキーワード一覧を教えてください）
 ```
 
-新規作成の場合は、ユーザーの入力をもとに `docs/series/{slug}-series.json` を以下の形式で作成：
+新規作成の場合は、ユーザーの入力をもとに `docs/series/{slug}/series.md` を以下の形式で作成：
 
-```json
-{
-  "seriesName": "シリーズ名",
-  "targetSite": "（.env の WP_SITE_URL から取得）",
-  "designDoc": null,
-  "articles": []
-}
+```markdown
+---
+seriesName: シリーズ名
+targetSite: （.env の WP_SITE_URL から取得）
+designDoc: null
+---
 ```
+
+設計ドキュメントがある場合は同ディレクトリに `docs/series/{slug}/design.md` として配置。
 
 作成後、記事の追加をユーザーと対話で進めてください。
 
