@@ -39,9 +39,6 @@ WordPress ブログの記事生成パイプライン。`.env` の `WP_SITE_URL` 
 # スクリーンショット撮影（対話形式: モード・URL/説明を質問）
 /screenshot
 
-# Claude Code UI モックアップのスクリーンショット（自然言語で画面を指定）
-/cc-screenshot
-
 # WordPress から直近N件の記事を取得
 npm run wp:fetch -- [count]    # default: 5
 
@@ -73,10 +70,7 @@ npx tsc --noEmit
 .claude/skills/edit/SKILL.md        ← 記事修正パイプライン定義（7ステップ）
 .claude/skills/incorporate/SKILL.md  ← 手動実体験データの記事反映（handson-tasks.json 処理）
 .claude/skills/screenshot/SKILL.md  ← スクリーンショット撮影（Web + ターミナルモック）
-.claude/skills/cc-screenshot/SKILL.md ← Claude Code UI モックアップスクリーンショット
 templates/terminal-mockup.html      ← ターミナル風HTMLテンプレート
-templates/claude-code-mockup.html   ← Claude Code UI 再現HTMLテンプレート（14コンポーネント）
-templates/cc-mascot.png             ← Claude Code マスコット画像（クロップ済み）
 docs/series/{slug}/series.md       ← シリーズ記事管理ファイル（Markdown + YAML frontmatter）
 docs/series/{slug}/design.md       ← シリーズ設計ドキュメント（任意）
 .claude/agents/style-loader.md      ← 共通エージェント: 文体キャッシュ読込/分析

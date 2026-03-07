@@ -59,8 +59,6 @@ cp .env.example .env
 # スクリーンショット撮影（Web / ターミナルモック）
 /screenshot
 
-# Claude Code UI モックアップのスクリーンショット
-/cc-screenshot
 ```
 
 各スキルは対話形式で必要な情報を質問します。`/generate` は PR 作成時に「ローカルのみ」を選択すると PR をスキップできます。
@@ -89,8 +87,6 @@ cp .env.example .env
   fact-check/SKILL.md      Fact verification (2 steps)
   incorporate/SKILL.md     Manual data incorporation (handson-tasks.json)
   screenshot/SKILL.md      Screenshot capture (Web + terminal mock)
-  cc-screenshot/SKILL.md   Claude Code UI mockup screenshot
-
 .claude/agents/          Agents (reusable, called by skills via Agent tool)
   style-loader.md          Style profile cache loading/analysis
   article-reviewer.md      5-category parallel review (haiku subagents)
@@ -106,7 +102,6 @@ scripts/                 WordPress API scripts
 
 templates/               HTML templates for screenshot generation
   terminal-mockup.html     Terminal-style mockup
-  claude-code-mockup.html  Claude Code UI mockup (14 components)
 
 articles/                Reviewed articles (git-tracked, via PR)
   {slug}/                  Per-article directory
