@@ -197,7 +197,7 @@ claude
 
 Claude Codeがプロジェクト内のファイルを読み取り、ディレクトリ構造や主要なコンポーネントを説明してくれます。
 
-![Claude Codeをターミナルで起動した画面](https://programming-zero.net/wp-content/uploads/2026/03/screenshot-1.png)
+<!-- HANDSON:0 - Claude Codeの起動画面の実スクリーンショットをここに挿入 -->
 
 インストール手順の詳細やトラブル対処法については、別記事で詳しく解説予定です。
 
