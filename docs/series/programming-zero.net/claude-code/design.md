@@ -190,18 +190,3 @@ Week 5〜: #6, #7, #8 を順次公開
 最後: #9（ハブ記事）
 ```
 
-## 技術的な対応
-
-### series.md の更新
-- `docs/series/programming-zero.net/claude-code/series.md` を新シリーズ構成に書き換え
-- `design.md` も本ドキュメントの内容に更新
-
-### 現PR・下書きの処理
-- PR #4 をクローズ
-- WP下書き（postId: 6990）を削除
-- `articles/programming-zero.net/what-is-claude-code/` を削除
-
-### パイプラインへの影響
-- `/generate` パイプラインはそのまま利用可能
-- `/illustrate` を積極活用（1記事あたり図解3〜5枚）
-- `/screenshot` で実演記事のスクリーンショットを撮影
