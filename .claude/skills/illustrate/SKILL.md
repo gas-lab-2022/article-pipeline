@@ -114,7 +114,7 @@ ls nanobanana-output/ 2>/dev/null || echo "empty"
 Bash ツールで以下を実行してください（タイムアウト: 180秒）：
 
 ```bash
-gemini -p "{Step 1 で構築したプロンプト}"
+gemini -y -p "{Step 1 で構築したプロンプト}"
 ```
 
 **注意:**
