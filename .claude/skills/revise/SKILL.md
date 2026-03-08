@@ -32,7 +32,20 @@ disable-model-invocation: true
 
 ---
 
-## セッションディレクトリの作成
+## ドメイン取得 & セッションディレクトリの作成
+
+### ドメイン取得
+
+`.env` の `WP_SITE_URL` からドメインを取得し、以降のパスの基点として使用します：
+
+```bash
+DOMAIN=$(grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||')
+echo "$DOMAIN"
+```
+
+取得した値を `domain` として保持してください（例: `programming-zero.net`）。
+
+### セッションディレクトリの作成
 
 複数セッションの同時実行でファイルが競合しないよう、セッション固有の出力ディレクトリを使用します。
 
@@ -41,15 +54,15 @@ disable-model-invocation: true
 1. `articleUrl` からURL のスラッグ部分を取得してください。
    - 例: `https://example.com/react-hooks-guide/` → `react-hooks-guide`
    - 例: `https://example.com/?p=123` → `p123`
-2. 以下の Bash コマンドでセッションディレクトリを作成してください（`<slug>` は手順 1 の値に置換）：
+2. 以下の Bash コマンドでセッションディレクトリを作成してください（`<slug>` は手順 1 の値に置換、`<domain>` は上記で取得した値に置換）：
 
 ```bash
-SESSION_DIR="output/$(date +%Y%m%d-%H%M%S)-revise-<slug>"
+SESSION_DIR="output/<domain>/$(date +%Y%m%d-%H%M%S)-revise-<slug>"
 mkdir -p "$SESSION_DIR"
 echo "$SESSION_DIR"
 ```
 
-3. 出力されたパスを `sessionDir` として保持してください（例: `output/20260305-143000-revise-react-hooks-guide`）。
+3. 出力されたパスを `sessionDir` として保持してください（例: `output/programming-zero.net/20260305-143000-revise-react-hooks-guide`）。
 
 以降、すべての出力ファイルは `{sessionDir}/` 配下に書き出します。
 

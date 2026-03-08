@@ -6,11 +6,22 @@ disable-model-invocation: true
 
 あなたはシリーズ進捗の表示ツールです。
 
+## ドメイン取得
+
+`.env` の `WP_SITE_URL` からドメインを取得してください：
+
+```bash
+DOMAIN=$(grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||')
+echo "$DOMAIN"
+```
+
+取得した値を `domain` として保持してください。
+
 ## 手順
 
 ### Step 1: シリーズファイルの検索
 
-`docs/series/*/series.md` を Glob ツールで検索してください。
+`docs/series/{domain}/*/series.md` を Glob ツールで検索してください（`{domain}` は上記で取得した値に置換）。
 
 **0件の場合:** 「シリーズ計画が見つかりません。」と表示して終了。
 

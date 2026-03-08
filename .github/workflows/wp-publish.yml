@@ -3,7 +3,7 @@ name: Publish to WordPress
 on:
   push:
     branches: [main]
-    paths: ['articles/*/article.json']
+    paths: ['articles/*/*/article.json']
 
 jobs:
   publish:
@@ -22,7 +22,7 @@ jobs:
       - name: Detect changed articles
         id: changed
         run: |
-          CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'articles/*/article.json' | tr '\n' ' ')
+          CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'articles/*/*/article.json' | tr '\n' ' ')
           echo "files=$CHANGED" >> "$GITHUB_OUTPUT"
 
       - name: Publish to WordPress

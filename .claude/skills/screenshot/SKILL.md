@@ -8,6 +8,19 @@ disable-model-invocation: true
 
 ---
 
+## ドメイン取得
+
+`.env` の `WP_SITE_URL` からドメインを取得してください：
+
+```bash
+DOMAIN=$(grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||')
+echo "$DOMAIN"
+```
+
+取得した値を `domain` として保持してください。
+
+---
+
 ## Step 0-pre: 対話による入力確認
 
 ユーザーに撮影モードを確認してください：
@@ -30,7 +43,7 @@ disable-model-invocation: true
 - `mode`: `web`
 - `targetUrl`: ユーザーが指定したURL
 - `cssSelector`: 指定があれば設定、なければ null
-- `outputDir`: `output/screenshots/`（デフォルト）
+- `outputDir`: `output/{domain}/screenshots/`（デフォルト）
 
 **Terminal を選択した場合:**
 
@@ -41,7 +54,7 @@ disable-model-invocation: true
 設定:
 - `mode`: `terminal`
 - `description`: ユーザーが指定した説明
-- `outputDir`: `output/screenshots/`（デフォルト）
+- `outputDir`: `output/{domain}/screenshots/`（デフォルト）
 
 ---
 

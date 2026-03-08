@@ -8,14 +8,15 @@ WordPress サイトの既存記事から文体を分析し、`styleProfile` を 
 1. `.env` の `WP_SITE_URL` からドメインを取得してください：
 
 ```bash
-grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||'
+DOMAIN=$(grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||')
+echo "$DOMAIN"
 ```
 
-2. **キャッシュ確認**: `cache/style-profiles/{domain}.json` を Read ツールで読み込んでください。
+2. **キャッシュ確認**: `cache/style-profiles/{domain}/profile.md` を Read ツールで読み込んでください。
    - **ファイルが存在しない場合**: 手順 3 に進んでください。
-   - **ファイルが存在する場合**: 「✅ 文体キャッシュあり（{cachedAtの日付}に分析）。再分析しますか？」とユーザーに質問してください。
+   - **ファイルが存在する場合**: YAML frontmatter の `cachedAt` を確認し、「✅ 文体キャッシュあり（{cachedAtの日付}に分析）。再分析しますか？」とユーザーに質問してください。
      - **「はい」** → 手順 3 に進んでください。
-     - **「いいえ」** → JSON の `styleProfile` フィールドの内容をそのまま **最終出力** として返してください。
+     - **「いいえ」** → ファイルの各セクション（writingStyle, sentenceEndings, tone, headingPattern, sectionStructure）を読み取り、JSON として **最終出力** に返してください。
 
 3. **新規分析**:
 
@@ -33,20 +34,32 @@ grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||'
    - **headingPattern**: H2/H3見出しの使い方パターン（命名規則、粒度など）
    - **sectionStructure**: セクション構成の傾向（導入→本題→まとめ、など）
 
-   c. 分析結果を以下のフォーマットで `cache/style-profiles/{domain}.json` に Write ツールで書き出してください：
+   c. 分析結果を `cache/style-profiles/{domain}/profile.md` に Write ツールで書き出してください：
 
-   ```json
-   {
-     "domain": "{domain}",
-     "cachedAt": "{ISO 8601形式の現在日時}",
-     "styleProfile": {
-       "writingStyle": "...",
-       "sentenceEndings": ["...", "..."],
-       "tone": "...",
-       "headingPattern": "...",
-       "sectionStructure": "..."
-     }
-   }
+   ```markdown
+   ---
+   domain: {domain}
+   cachedAt: {ISO 8601形式の現在日時}
+   ---
+
+   # 文体プロファイル
+
+   ## writingStyle
+   {分析結果}
+
+   ## sentenceEndings
+   - {語尾パターン1}
+   - {語尾パターン2}
+   - ...
+
+   ## tone
+   {分析結果}
+
+   ## headingPattern
+   {分析結果}
+
+   ## sectionStructure
+   {分析結果}
    ```
 
 ## 最終出力

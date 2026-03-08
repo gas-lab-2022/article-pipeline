@@ -11,10 +11,11 @@ disable-model-invocation: true
 
 ## Step 0: 入力確認
 
-`$ARGUMENTS` にセッションディレクトリのパスが含まれていない場合は、`output/` 配下の `handson-tasks.json` を持つディレクトリを検索してください：
+`$ARGUMENTS` にセッションディレクトリのパスが含まれていない場合は、まずドメインを取得し、`output/{domain}/` 配下の `handson-tasks.json` を持つディレクトリを検索してください：
 
 ```bash
-find output -name "handson-tasks.json" -maxdepth 2 | sort -r | head -10
+DOMAIN=$(grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||')
+find "output/$DOMAIN" -name "handson-tasks.json" -maxdepth 2 | sort -r | head -10
 ```
 
 見つかったディレクトリを一覧表示し、ユーザーに選択を求めてください。

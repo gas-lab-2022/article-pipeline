@@ -9,11 +9,24 @@ disable-model-invocation: true
 
 ---
 
+## ドメイン取得
+
+`.env` の `WP_SITE_URL` からドメインを取得してください：
+
+```bash
+DOMAIN=$(grep WP_SITE_URL .env | sed 's|.*://||' | sed 's|/.*||')
+echo "$DOMAIN"
+```
+
+取得した値を `domain` として保持してください。
+
+---
+
 ## Phase 1: シリーズ前処理
 
 ### Step 1-1: シリーズの選択
 
-`docs/series/*/series.md` を Glob ツールで検索してください。
+`docs/series/{domain}/*/series.md` を Glob ツールで検索してください（`{domain}` は上記で取得した値に置換）。
 
 **0件の場合:**
 
@@ -24,7 +37,7 @@ disable-model-invocation: true
 新しいシリーズ計画を作成しますか？（作成する場合、シリーズ名とキーワード一覧を教えてください）
 ```
 
-新規作成の場合は、ユーザーの入力をもとに `docs/series/{slug}/series.md` を以下の形式で作成：
+新規作成の場合は、ユーザーの入力をもとに `docs/series/{domain}/{slug}/series.md` を以下の形式で作成：
 
 ```markdown
 ---
@@ -34,7 +47,7 @@ designDoc: null
 ---
 ```
 
-設計ドキュメントがある場合は同ディレクトリに `docs/series/{slug}/design.md` として配置。
+設計ドキュメントがある場合は同ディレクトリに `docs/series/{domain}/{slug}/design.md` として配置。
 
 作成後、記事の追加をユーザーと対話で進めてください。
 

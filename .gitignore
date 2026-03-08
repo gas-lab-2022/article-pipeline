@@ -3,8 +3,10 @@ dist/
 .env
 output/*.json
 output/**/*.json
-cache/*.json
-cache/**/*.json
+output/**/*.md
 output/**/*.png
 output/**/*.html
+cache/**/*.json
+cache/**/*.md
 .playwright-mcp
+nanobanana-output/

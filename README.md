@@ -56,9 +56,14 @@ cp .env.example .env
 # 手動で収集した実体験データを記事に反映
 /incorporate [session-dir]
 
+# 図解画像生成（Gemini CLI + Nanobanana）
+/illustrate [説明テキスト]
+
 # スクリーンショット撮影（Web / ターミナルモック）
 /screenshot
 
+# シリーズ進捗ステータス表示
+/series-status
 ```
 
 各スキルは対話形式で必要な情報を質問します。`/generate` は PR 作成時に「ローカルのみ」を選択すると PR をスキップできます。
@@ -86,7 +91,9 @@ cp .env.example .env
   review/SKILL.md          Quality review (3 steps)
   fact-check/SKILL.md      Fact verification (2 steps)
   incorporate/SKILL.md     Manual data incorporation (handson-tasks.json)
+  illustrate/SKILL.md      Diagram generation (Gemini CLI + Nanobanana)
   screenshot/SKILL.md      Screenshot capture (Web + terminal mock)
+  series-status/SKILL.md   Series progress status display
 .claude/agents/          Agents (reusable, called by skills via Agent tool)
   style-loader.md          Style profile cache loading/analysis
   article-reviewer.md      5-category parallel review (haiku subagents)
@@ -104,23 +111,28 @@ templates/               HTML templates for screenshot generation
   terminal-mockup.html     Terminal-style mockup
 
 articles/                Reviewed articles (git-tracked, via PR)
-  {slug}/                  Per-article directory
-    article.json             WP publish data
-    article.md               Review-friendly Markdown
-    review.md                Auto-review results
-    fact-check.md            Fact-check results
-    screenshots/             Article screenshots
+  {domain}/                Domain-scoped directory
+    {slug}/                  Per-article directory
+      article.json             WP publish data
+      article.md               Review-friendly Markdown
+      review.md                Auto-review results
+      fact-check.md            Fact-check results
+      screenshots/             Article screenshots
 
 .github/workflows/       CI/CD
   wp-publish.yml           Auto-publish to WP on merge to main
 
 output/                  Working files (gitignored)
-  {sessionDir}/            Session-specific directory
+  {domain}/                Domain-scoped directory
+    {sessionDir}/            Session-specific directory
 
 cache/                   Cached data (gitignored)
-  style-profiles/          Domain-specific style profiles
+  style-profiles/
+    {domain}/                Domain-scoped directory
+      profile.md               Style analysis cache (Markdown)
 
 docs/series/             Series planning files
+  {domain}/                Domain-scoped directory
 ```
 
 ### Pipeline Flow
@@ -129,7 +141,7 @@ docs/series/             Series planning files
 /generate (Steps 0-8)
   → style-loader → keyword/SEO analysis → outline → article → screenshots
   → article-reviewer (5x parallel haiku) → fact-checker (Nx parallel WebSearch)
-  → Step 9: WP draft → PR creation (article/{slug} branch, with WP preview URL)
+  → Step 9: WP draft → PR creation (article/{domain}/{slug} branch, with WP preview URL)
 
 Human Review (on PR + WP Preview)
   → Team reviews article.md on PR, checks WP preview for layout/styling
