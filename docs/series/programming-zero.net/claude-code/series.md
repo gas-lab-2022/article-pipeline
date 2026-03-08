@@ -1,7 +1,7 @@
 ---
 seriesName: エンジニアなしでできる時代へ — 非エンジニアのAIコーディング入門
 targetSite: programming-zero.net
-designDoc: docs/plans/2026-03-08-series-redesign.md
+designDoc: docs/series/programming-zero.net/claude-code/design.md
 ---
 
 ## #1 — AI 業務効率化【気づく】
