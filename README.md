@@ -71,7 +71,7 @@ cp .env.example .env
 | `npm run wp:fetch -- [count]` | WordPress から直近 N 件の記事を取得（default: 5） |
 | `npm run wp:fetch-by-url -- <url>` | URL 指定で単一記事を取得 |
 | `npm run wp:publish -- <path>` | article.json を WordPress に下書き投稿 |
-| `npm run wp:update -- <postId> <path>` | article.json で既存記事を更新 |
+| `npm run wp:update -- <postId> <path> [--status=publish]` | article.json で既存記事を更新（`--status` でステータス変更可） |
 | `npm run wp:upload-media -- <path> [alt]` | 画像を WP メディアライブラリにアップロード |
 <!-- /AUTO-GENERATED:SCRIPTS-TABLE -->
 
@@ -129,13 +129,14 @@ docs/series/             Series planning files
 /generate (Steps 0-8)
   → style-loader → keyword/SEO analysis → outline → article → screenshots
   → article-reviewer (5x parallel haiku) → fact-checker (Nx parallel WebSearch)
-  → Step 9: PR creation (article/{slug} branch)
+  → Step 9: WP draft → PR creation (article/{slug} branch, with WP preview URL)
 
-Human Review (on PR)
-  → Team reviews article.md, completes manual tasks
-  → Approve
+Human Review (on PR + WP Preview)
+  → Team reviews article.md on PR, checks WP preview for layout/styling
+  → Complete manual tasks (screenshots, etc.)
+  → Approve & Merge
 
-Merge to main → GitHub Actions → WP auto-publish
+Merge to main → GitHub Actions → WP publish (update existing draft or create new)
 ```
 
 ## Tech Stack

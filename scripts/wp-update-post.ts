@@ -12,11 +12,15 @@ interface ArticleData {
 }
 
 async function main() {
-  const postIdArg = process.argv[2];
-  const filePath = process.argv[3];
+  const args = process.argv.slice(2);
+  const statusFlag = args.find(a => a.startsWith('--status='));
+  const positional = args.filter(a => !a.startsWith('--'));
+  const postIdArg = positional[0];
+  const filePath = positional[1];
+  const status = statusFlag?.split('=')[1];
 
   if (!postIdArg || !filePath) {
-    console.error('Usage: npx tsx scripts/wp-update-post.ts <postId> <article.json>');
+    console.error('Usage: npx tsx scripts/wp-update-post.ts <postId> <article.json> [--status=publish]');
     process.exit(1);
   }
 
@@ -44,6 +48,7 @@ async function main() {
       ...(article.slug ? { slug: article.slug } : {}),
       content: article.htmlContent,
       excerpt: article.metaDescription,
+      ...(status ? { status } : {}),
     }),
   });
 

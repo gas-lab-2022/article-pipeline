@@ -46,6 +46,64 @@ article.json の `seoTitle` と `metaDescription` が使用される:
 - 投稿タイトルが長い場合やKWの並びを変えたい場合に `seoTitle` を明示的に設定
 - テーマは未入力時に「記事タイトル|Programming ZERO」形式で自動出力。サイト名付与が不要なら明示的に設定する
 
+## 吹き出し（体験談・一次情報用）
+
+THE THOR の吹き出しパーツを使い、体験談や一次情報のコメントを視覚的に差別化する。
+
+### HTML 構造
+
+```html
+<!-- 左画像・背景スタイル -->
+<div class="balloon">
+  <div class="balloon__img balloon__img-left">
+    <div></div>
+  </div>
+  <div class="balloon__text balloon__text-right">
+    <p>体験談テキスト</p>
+  </div>
+</div>
+
+<!-- 左画像・ボーダースタイル -->
+<div class="balloon balloon-boder">
+  <div class="balloon__img balloon__img-left">
+    <div></div>
+  </div>
+  <div class="balloon__text balloon__text-right">
+    <p>体験談テキスト</p>
+  </div>
+</div>
+
+<!-- 右画像・背景スタイル -->
+<div class="balloon">
+  <div class="balloon__img balloon__img-right">
+    <div></div>
+  </div>
+  <div class="balloon__text balloon__text-left">
+    <p>体験談テキスト</p>
+  </div>
+</div>
+```
+
+### 使い分け
+
+| スタイル | 用途 |
+|---|---|
+| 左画像・背景 | 筆者の体験談・感想（メイン） |
+| 左画像・ボーダー | 補足コメント・ワンポイントアドバイス |
+| 右画像 | 対話形式（読者の疑問を代弁する場合など） |
+
+### 設定
+
+吹き出し画像は WordPress カスタマイザーで登録:
+外観 → カスタマイズ → パーツスタイル設定[THE] → 吹き出し設定
+
+### 記事生成での使用ルール
+
+- 1記事あたり **2〜4箇所** 程度（多用しすぎない）
+- 体験に基づく感想・気づき・注意点に使用する
+- 単なる説明文には使用しない（通常の `<p>` で十分）
+- 吹き出し内は **1〜3文** の短いコメントにする
+
 ## 既知の制限
 
 - REST APIで `show_in_rest` に登録されていないため、REST APIの `meta` フィールドでは読み書き不可

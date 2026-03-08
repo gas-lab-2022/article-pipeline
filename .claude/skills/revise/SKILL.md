@@ -187,6 +187,7 @@ npx tsx scripts/wp-fetch-post-by-url.ts {articleUrl}
 - 読者の不安を先回りして解消する
 - H2/H3タグを適切に使用し、WordPress のブロックエディタと互換性のあるHTMLで出力
 - タイトルは本文に含めない（WordPressが自動付与するため）
+- **吹き出し（体験談）**: 体験談・一次情報に基づく感想・気づき・注意点は、テーマの吹き出し HTML パーツで表現する。`docs/wp-theme-the-thor.md` の「吹き出し」セクションを Read ツールで読み込み、HTML 構造と使用ルールに従うこと。
 
 ### 出力
 

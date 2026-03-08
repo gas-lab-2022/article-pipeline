@@ -37,7 +37,14 @@ jobs:
         run: |
           for f in ${{ steps.changed.outputs.files }}; do
             echo "Publishing: $f"
-            npx tsx scripts/wp-publish-draft.ts "$f"
+            WP_POST_ID=$(node -e "const d=JSON.parse(require('fs').readFileSync('$f','utf8')); if(d.wpPostId) console.log(d.wpPostId)")
+            if [ -n "$WP_POST_ID" ]; then
+              echo "Updating existing draft (Post ID: $WP_POST_ID) to publish"
+              npx tsx scripts/wp-update-post.ts "$WP_POST_ID" "$f" --status=publish
+            else
+              echo "Creating new draft"
+              npx tsx scripts/wp-publish-draft.ts "$f"
+            fi
           done
 
       - name: Summary
