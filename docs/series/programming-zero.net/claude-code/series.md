@@ -20,17 +20,17 @@ designDoc: docs/plans/2026-03-08-series-redesign.md
 - **Related**: 1, 3
 - **Description**: エンジニア外注の課題。AIコーディングで非エンジニアが自走する仕組みを図解。
 
-## #3 — Claude Code 非エンジニア【知る】
+## #3 — Claude Code とは【知る】
 - **Title**: Claude Codeとは？非エンジニアこそ使うべき理由
-- **Sub KW**: Claude Code とは, AIコーディング 非エンジニア
+- **Sub KW**: Claude Code 非エンジニア, AIコーディング 非エンジニア
 - **Priority**: 1
 - **Status**: draft
 - **Related**: 1, 2, 4, 5
 - **Description**: Claude Codeの概要を非エンジニア向けに図解で解説。なぜ非エンジニアに向いているのか。
 
-## #4 — Claude Code 料金 外注比較【知る】
+## #4 — Claude Code 料金【知る】
 - **Title**: Claude Codeの料金は？エンジニア外注と比較してどれだけお得か
-- **Sub KW**: Claude Code 料金, AI ツール コスト, エンジニア 外注 費用
+- **Sub KW**: Claude Code 料金 プラン, Claude Code 価格, エンジニア 外注 費用
 - **Priority**: 3
 - **Status**: draft
 - **Related**: 3, 5
