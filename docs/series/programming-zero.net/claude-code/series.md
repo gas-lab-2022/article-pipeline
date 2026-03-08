@@ -10,7 +10,7 @@ designDoc: docs/series/claude-code/design.md
 - **Priority**: 1
 - **Status**: pr-created
 - **Related**: 2, 3, 4
-- **PR URL**: https://github.com/gas-lab-2022/article-pipeline/pull/3
+- **wpPostId**: 6990
 - **Description**: Claude Codeの概要・特徴を初心者向けに解説。ターミナルベースのAIコーディングツールとは何か。
 
 ## #2 — claude code 料金【知る】
