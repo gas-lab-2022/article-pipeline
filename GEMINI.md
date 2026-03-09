@@ -15,12 +15,14 @@ The core process involves:
 ## Architecture & Key Directories
 
 -   **`.claude/`**: Contains the definitions for AI skills and reusable agents.
-    -   `skills/`: Defines multi-step pipelines for tasks like `/generate`, `/revise`, and `/edit`. These are the primary entry points for using the system.
+    -   `skills/`: Defines multi-step pipelines for tasks like `/generate`, `/revise`, `/edit`, `/illustrate`, `/screenshot`, `/series-generate`, `/series-status`, `/incorporate`, `/review`, and `/fact-check`. These are the primary entry points for using the system.
     -   `agents/`: Reusable components called by skills for specific tasks like reviewing an article (`article-reviewer.md`) or loading a style profile (`style-loader.md`).
 -   **`scripts/`**: A collection of TypeScript scripts for direct interaction with the WordPress REST API. These handle fetching, publishing, updating posts, and uploading media.
 -   **`articles/`**: Git-tracked directory where reviewed and approved articles are stored before being published. The PR review process happens here.
 -   **`output/`**: A git-ignored directory for temporary files generated during a skill's execution (e.g., drafts, review notes). Each session gets a unique subdirectory.
 -   **`cache/`**: Git-ignored directory for caching data like website style profiles to speed up subsequent runs.
+-   **`docs/series/`**: Series planning files organized by domain and slug (e.g., `docs/series/{domain}/{slug}/series.md`).
+-   **`templates/`**: HTML templates used for screenshot generation (e.g., `terminal-mockup.html` for terminal-style mockups).
 -   **`.github/workflows/`**: Contains the GitHub Actions workflow (`wp-publish.yml`) that automates publishing to WordPress on PR merges.
 -   **`package.json`**: Defines the project's dependencies (`typescript`, `tsx`, `dotenv`) and key scripts.
 
@@ -51,6 +53,10 @@ The primary interface is through AI skills (e.g., `/generate [keyword]`). Howeve
 -   **Fetch recent posts from WordPress**:
     ```bash
     npm run wp:fetch -- [count]
+    ```
+-   **Fetch a single post by URL**:
+    ```bash
+    npm run wp:fetch-by-url -- <article-url>
     ```
 -   **Publish a local article draft to WordPress**:
     ```bash

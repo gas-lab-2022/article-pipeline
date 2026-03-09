@@ -138,8 +138,9 @@ docs/series/             Series planning files
 ### Pipeline Flow
 
 ```
-/generate (Steps 0-8)
-  → style-loader → keyword/SEO analysis → outline → article → screenshots
+/generate (Steps 0-9)
+  → style-loader → keyword/SEO analysis → intent/differentiation → outline
+  → article → illustrate & screenshot (Step 6.5, Gemini CLI + Playwright)
   → article-reviewer (5x parallel haiku) → fact-checker (Nx parallel WebSearch)
   → Step 9: WP draft → PR creation (article/{domain}/{slug} branch, with WP preview URL)
 
