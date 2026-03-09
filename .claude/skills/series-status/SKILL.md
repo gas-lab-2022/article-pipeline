@@ -59,14 +59,17 @@ echo "$DOMAIN"
 フェーズ（見出しの【】内）ごとにグループ化し、Priority 昇順で表示：
 
 ```
-【知る】
-  ✅ #1  claude code とは — Claude Codeとは？できること・特徴を... (published)
-  🔄 #2  claude code 料金 — Claude Codeの料金プランを徹底解説... (wp-draft) ← WP公開待ち
-  ⬜ #3  claude code — 【2026年最新】Claude Code完全ガイド (draft)
+【気づく】
+  ✅ #1  AI 業務効率化 — AIで業務を自動化する時代に非エンジニアが... (published)
+  ⬜ #2  エンジニア不要 AI — 「エンジニアに頼むしかない」を終わらせる... (draft)
 
-【試す】
-  🔄 #4  claude code install — Claude Codeのインストール方法... (pr-created) ← PRレビュー待ち
-  ⬜ #5  claude code vscode — Claude Code × VSCodeの導入と使い方 (draft)
+【知る】
+  🔄 #3  Claude Code 非エンジニア — Claude Codeとは？非エンジニアこそ... (wp-draft) ← WP公開待ち
+  ⬜ #4  Claude Code 料金 — Claude Codeの料金は？エンジニア外注と... (draft)
+
+【実感する】
+  🔄 #5  GAS 限界 AI — GAS・ノーコードの限界を超える！Claude Code... (pr-created) ← PRレビュー待ち
+  ⬜ #6  社内ツール 自作 AI — 非エンジニアがClaude Codeで社内ツール... (draft)
   ...
 ```
 
